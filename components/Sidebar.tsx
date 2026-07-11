@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import AuthNav from "./AuthNav";
 
 const NAV = [
   { href: "/", label: "แดชบอร์ด", sub: "Dashboard", emoji: "🏠" },
@@ -104,6 +105,9 @@ export default function Sidebar() {
           <div className="absolute inset-y-0 left-0 w-72 overflow-y-auto border-r border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
             <div className="mb-6">{brand}</div>
             {nav}
+            <div className="mt-6">
+              <AuthNav onNavigate={() => setOpen(false)} />
+            </div>
           </div>
         </div>
       )}
@@ -112,11 +116,14 @@ export default function Sidebar() {
       <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 flex-col border-r border-slate-200 bg-white p-4 lg:flex dark:border-slate-800 dark:bg-slate-900">
         <div className="mb-8 px-1">{brand}</div>
         {nav}
-        <div className="mt-auto rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-400">
-          <p className="font-medium text-slate-600 dark:text-slate-300">
-            ลดเวลาทำเอกสาร
-          </p>
-          <p>จาก 2–5 วัน เหลือ 15–30 นาที</p>
+        <div className="mt-auto space-y-3">
+          <AuthNav />
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-400">
+            <p className="font-medium text-slate-600 dark:text-slate-300">
+              ลดเวลาทำเอกสาร
+            </p>
+            <p>จาก 2–5 วัน เหลือ 15–30 นาที</p>
+          </div>
         </div>
       </aside>
     </>
