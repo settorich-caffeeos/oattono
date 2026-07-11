@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useConfig, MODEL_OPTIONS } from "@/lib/config";
 
 type TestState =
@@ -15,6 +15,14 @@ export default function SettingsPage() {
   const [show, setShow] = useState(false);
   const [saved, setSaved] = useState(false);
   const [test, setTest] = useState<TestState>({ status: "idle" });
+  const [serverHasKey, setServerHasKey] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/ai-status")
+      .then((r) => r.json())
+      .then((d) => setServerHasKey(!!d.serverHasKey))
+      .catch(() => {});
+  }, []);
 
   // keyInput mirrors config until the user edits it
   const value = keyInput ?? config.apiKey;
@@ -62,7 +70,7 @@ export default function SettingsPage() {
         <div>
           <h1 className="text-2xl font-bold">ตั้งค่า</h1>
           <p className="text-slate-500 dark:text-slate-400">
-            เชื่อมต่อ Claude ด้วย Anthropic API key ของคุณ
+            ใช้คีย์ส่วนตัว (ไม่บังคับ) — ปกติเซิร์ฟเวอร์ตั้งคีย์ให้ทุกคนอยู่แล้ว
           </p>
         </div>
       </header>
@@ -70,20 +78,30 @@ export default function SettingsPage() {
       {/* Status */}
       <div
         className={`mb-6 rounded-2xl border px-5 py-4 text-sm ${
-          configured
+          serverHasKey || configured
             ? "border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900/60 dark:bg-emerald-950/30 dark:text-emerald-200"
             : "border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200"
         }`}
       >
-        {configured ? (
+        {serverHasKey ? (
           <>
-            <span className="font-semibold">เชื่อมต่อแล้ว:</span> มี API key
+            <span className="font-semibold">เซิร์ฟเวอร์ตั้งค่าคีย์ให้แล้ว:</span>{" "}
+            ผู้ใช้ทุกคนใช้ AI ได้เลย <span className="font-semibold">ไม่ต้องกรอกคีย์</span>{" "}
+            — ช่องด้านล่างมีไว้เฉพาะกรณีอยากใช้ <span className="font-semibold">คีย์ส่วนตัวของคุณเอง</span> แทน (ไม่บังคับ)
+          </>
+        ) : configured ? (
+          <>
+            <span className="font-semibold">เชื่อมต่อแล้ว:</span> ใช้ API key ส่วนตัวที่
             บันทึกไว้ในเบราว์เซอร์นี้ — ฟีเจอร์ AI ทั้งหมดใช้งาน Claude เต็มรูปแบบ
           </>
         ) : (
           <>
-            <span className="font-semibold">โหมดสาธิต:</span> ยังไม่ได้ใส่ API key
-            — แอปใช้งานได้ครบและแสดงเนื้อหาตัวอย่าง ใส่คีย์ด้านล่างเพื่อเปิด Claude
+            <span className="font-semibold">โหมดสาธิต:</span> ยังไม่มีคีย์
+            (ทั้งฝั่งเซิร์ฟเวอร์และเบราว์เซอร์) — ใส่คีย์ด้านล่าง หรือให้ผู้ดูแลตั้ง{" "}
+            <code className="rounded bg-amber-100 px-1 dark:bg-amber-900/50">
+              ANTHROPIC_API_KEY
+            </code>{" "}
+            บนเซิร์ฟเวอร์เพื่อเปิดให้ทุกคน
           </>
         )}
       </div>
