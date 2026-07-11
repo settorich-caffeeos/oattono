@@ -36,6 +36,7 @@ export default function SignupPage() {
       password,
       options: {
         data: { display_name: displayName, department, role_level: level },
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
     setLoading(false);
