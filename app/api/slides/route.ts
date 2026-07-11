@@ -13,16 +13,30 @@ export async function POST(req: NextRequest) {
     audience?: string;
     count?: string;
     tone?: string;
+    source?: string;
   };
   const topic = (body.topic || "").trim();
+  const source = (body.source || "").trim().slice(0, 16000);
   const agent = getAgent("presentation-expert");
 
-  const prompt = `ออกแบบชุดสไลด์นำเสนอที่ "สวยและเป็นมืออาชีพ" เรื่อง: "${topic}"
-กลุ่มผู้ฟัง: ${body.audience || "ผู้บริหาร"}
+  const common = `กลุ่มผู้ฟัง: ${body.audience || "ผู้บริหาร"}
 จำนวนสไลด์โดยประมาณ: ${body.count || "10"}
 โทน/จุดเน้น: ${body.tone || "กระชับ โน้มน้าว เชื่อมโยงกลยุทธ์องค์กร"}
 
-ออกแบบ storyline ที่ลื่นไหล เลือกใช้ประเภทสไลด์ให้หลากหลาย (stat สำหรับตัวเลขเด่น, twocol สำหรับเปรียบเทียบ, chart เมื่อมีข้อมูลเชิงปริมาณ) และเขียน speaker notes ที่นำไปพูดได้จริง
+ออกแบบ storyline ที่ลื่นไหล เลือกใช้ประเภทสไลด์ให้หลากหลาย (stat สำหรับตัวเลขเด่น, twocol สำหรับเปรียบเทียบ, chart เมื่อมีข้อมูลเชิงปริมาณ) และเขียน speaker notes ที่นำไปพูดได้จริง`;
+
+  const prompt = source
+    ? `เรียบเรียง "เนื้อหาต้นทาง" ด้านล่าง (มาจากเอกสารในโครงการของผู้ใช้) ให้กลายเป็นชุดสไลด์นำเสนอที่สวยและเป็นมืออาชีพ — สรุปประเด็นสำคัญ ดึงตัวเลข/ข้อมูลที่มีมาทำ stat/chart และคงสาระเดิมไว้ อย่าแต่งข้อมูลเกินจากต้นทาง
+${topic ? `หัวข้อ/มุมเน้น: ${topic}` : ""}
+${common}
+
+=== เนื้อหาต้นทาง ===
+${source}
+=== จบเนื้อหาต้นทาง ===
+
+${SLIDE_SCHEMA_HINT}`
+    : `ออกแบบชุดสไลด์นำเสนอที่ "สวยและเป็นมืออาชีพ" เรื่อง: "${topic}"
+${common}
 
 ${SLIDE_SCHEMA_HINT}`;
 

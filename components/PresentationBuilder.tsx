@@ -20,6 +20,25 @@ export default function PresentationBuilder() {
   const [count, setCount] = useState("10");
   const [tone, setTone] = useState("");
   const [paletteId, setPaletteId] = useState("indigo");
+  const [sourceMode, setSourceMode] = useState<"topic" | "project">("topic");
+  const [projectId, setProjectId] = useState("");
+  const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
+
+  const activeProject = projects.find((p) => p.id === projectId);
+
+  function chooseProject(id: string) {
+    setProjectId(id);
+    const p = projects.find((x) => x.id === id);
+    setSelectedDocs(new Set((p?.documents ?? []).map((d) => d.id)));
+  }
+  function toggleDoc(id: string) {
+    setSelectedDocs((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  }
 
   const [deck, setDeck] = useState<Deck | null>(null);
   const [loading, setLoading] = useState(false);
@@ -36,17 +55,33 @@ export default function PresentationBuilder() {
   const palette = getPalette(paletteId);
   const rawRef = useRef("");
 
+  const fromProject = sourceMode === "project";
+  const chosenDocs = (activeProject?.documents ?? []).filter((d) =>
+    selectedDocs.has(d.id),
+  );
+  const canGenerate = fromProject ? chosenDocs.length > 0 : !!topic.trim();
+
   async function generate() {
-    if (!topic.trim()) return;
+    if (!canGenerate) return;
     setError("");
     setDeck(null);
     setLoading(true);
     setCurrent(0);
     rawRef.current = "";
+
+    let source = "";
+    let effectiveTopic = topic;
+    if (fromProject && activeProject) {
+      source = chosenDocs
+        .map((d) => `# ${d.title}\n${d.content}`)
+        .join("\n\n---\n\n");
+      if (!effectiveTopic.trim()) effectiveTopic = activeProject.name;
+    }
+
     try {
       await streamPost(
         "/api/slides",
-        { topic, audience, count, tone },
+        { topic: effectiveTopic, audience, count, tone, source },
         (chunk) => {
           rawRef.current += chunk;
         },
@@ -110,13 +145,85 @@ export default function PresentationBuilder() {
           ตั้งค่าการนำเสนอ
         </h2>
         <div className="space-y-4">
+          {/* source mode */}
+          <div className="grid grid-cols-2 gap-1 rounded-xl bg-slate-100 p-1 dark:bg-slate-800">
+            {(
+              [
+                ["topic", "หัวข้อใหม่"],
+                ["project", "จากโครงการ"],
+              ] as const
+            ).map(([m, label]) => (
+              <button
+                key={m}
+                onClick={() => setSourceMode(m)}
+                className={`rounded-lg px-3 py-1.5 text-sm font-medium transition ${
+                  sourceMode === m
+                    ? "bg-white text-brand-700 shadow-sm dark:bg-slate-900 dark:text-brand-300"
+                    : "text-slate-500"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {fromProject && (
+            <div className="space-y-2 rounded-xl border border-slate-200 p-3 dark:border-slate-700">
+              <label className="block text-sm font-medium">เลือกโครงการ</label>
+              <select
+                value={projectId}
+                onChange={(e) => chooseProject(e.target.value)}
+                className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"
+              >
+                <option value="">— เลือก —</option>
+                {projects.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.documents.length})
+                  </option>
+                ))}
+              </select>
+              {activeProject && activeProject.documents.length > 0 ? (
+                <div className="max-h-44 space-y-1 overflow-y-auto pt-1">
+                  {activeProject.documents.map((d) => (
+                    <label
+                      key={d.id}
+                      className="flex cursor-pointer items-start gap-2 text-sm"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={selectedDocs.has(d.id)}
+                        onChange={() => toggleDoc(d.id)}
+                        className="mt-0.5 h-4 w-4 accent-brand-600"
+                      />
+                      <span className="min-w-0 truncate">{d.title}</span>
+                    </label>
+                  ))}
+                </div>
+              ) : activeProject ? (
+                <p className="text-xs text-slate-400">
+                  โครงการนี้ยังไม่มีเอกสาร — ไปบันทึกเอกสารจากโมดูลเข้าโครงการก่อน
+                </p>
+              ) : projects.length === 0 ? (
+                <p className="text-xs text-slate-400">
+                  ยังไม่มีโครงการ — สร้างเอกสารจากโมดูลแล้วบันทึกเข้าโครงการก่อน
+                </p>
+              ) : null}
+            </div>
+          )}
+
           <div>
-            <label className="mb-1 block text-sm font-medium">หัวข้อ *</label>
+            <label className="mb-1 block text-sm font-medium">
+              {fromProject ? "หัวข้อ / มุมเน้น (ไม่บังคับ)" : "หัวข้อ *"}
+            </label>
             <textarea
-              rows={3}
+              rows={fromProject ? 2 : 3}
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="เช่น แผน Digital Transformation ปี 2026 สำหรับธนาคาร"
+              placeholder={
+                fromProject
+                  ? "เว้นว่างได้ — จะใช้ชื่อโครงการเป็นหัวข้อ"
+                  : "เช่น แผน Digital Transformation ปี 2026 สำหรับธนาคาร"
+              }
               className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-brand-400 dark:border-slate-700 dark:bg-slate-950"
             />
           </div>
@@ -169,10 +276,14 @@ export default function PresentationBuilder() {
           </div>
           <button
             onClick={generate}
-            disabled={loading || !topic.trim()}
+            disabled={loading || !canGenerate}
             className="w-full rounded-xl bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-700 disabled:opacity-50"
           >
-            {loading ? "กำลังออกแบบสไลด์…" : "✨ สร้างสไลด์ด้วย AI"}
+            {loading
+              ? "กำลังออกแบบสไลด์…"
+              : fromProject
+                ? "✨ สร้างสไลด์จากโครงการ"
+                : "✨ สร้างสไลด์ด้วย AI"}
           </button>
           {/* live palette swatches */}
           <div className="flex gap-1.5 pt-1">
