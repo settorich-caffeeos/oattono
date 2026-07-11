@@ -14,7 +14,7 @@ function safeName(title: string): string {
 
 /* ==================== PPTX ==================== */
 
-export async function slidesToPptx(deck: Deck, p: Palette) {
+export async function slidesToPptx(deck: Deck, p: Palette, logo?: string) {
   const pptx = new pptxgen();
   pptx.layout = "LAYOUT_WIDE";
   pptx.author = "DT Copilot";
@@ -23,7 +23,7 @@ export async function slidesToPptx(deck: Deck, p: Palette) {
   deck.slides.forEach((s, i) => {
     const slide = pptx.addSlide();
     if (s.notes) slide.addNotes(s.notes);
-    renderSlide(pptx, slide, s, i, deck.slides.length, p);
+    renderSlide(pptx, slide, s, i, deck.slides.length, p, logo);
   });
 
   const blob = (await pptx.write({ outputType: "blob" })) as Blob;
@@ -83,6 +83,28 @@ function pageNo(slide: pptxgen.Slide, i: number, total: number, p: Palette) {
   });
 }
 
+/** โลโก้บนพื้นเข้ม — ชิปขาว มุมซ้ายบน */
+function darkLogo(pptx: pptxgen, slide: pptxgen.Slide, logo?: string) {
+  if (!logo) return;
+  slide.addShape(pptx.ShapeType.roundRect, {
+    x: MX,
+    y: 0.45,
+    w: 2.0,
+    h: 0.82,
+    fill: { color: "FFFFFF" },
+    line: { type: "none" },
+    rectRadius: 0.08,
+    shadow: { type: "outer", blur: 6, offset: 2, angle: 90, color: "000000", opacity: 0.18 },
+  });
+  slide.addImage({ data: logo, x: MX + 0.14, y: 0.56, w: 1.72, h: 0.6, sizing: { type: "contain", w: 1.72, h: 0.6 } });
+}
+
+/** โลโก้บนพื้นสว่าง — มุมขวาบน */
+function lightLogo(slide: pptxgen.Slide, logo?: string) {
+  if (!logo) return;
+  slide.addImage({ data: logo, x: W - MX - 1.7, y: 0.35, w: 1.7, h: 0.55, sizing: { type: "contain", w: 1.7, h: 0.55 } });
+}
+
 function renderSlide(
   pptx: pptxgen,
   slide: pptxgen.Slide,
@@ -90,9 +112,11 @@ function renderSlide(
   i: number,
   total: number,
   p: Palette,
+  logo?: string,
 ) {
   if (s.type === "cover" || s.type === "closing") {
     slide.background = { color: p.primaryDark };
+    darkLogo(pptx, slide, logo);
     slide.addShape(pptx.ShapeType.rect, {
       x: MX,
       y: 2.6,
@@ -126,6 +150,7 @@ function renderSlide(
 
   if (s.type === "section") {
     slide.background = { color: p.primaryDark };
+    darkLogo(pptx, slide, logo);
     slide.addText(String(i + 1).padStart(2, "0"), {
       x: MX,
       y: 2,
@@ -151,6 +176,7 @@ function renderSlide(
 
   if (s.type === "quote") {
     slide.background = { color: p.lightBg };
+    lightLogo(slide, logo);
     slide.addText(`“${s.quote || ""}”`, {
       x: 1.5,
       y: 2.2,
@@ -179,6 +205,7 @@ function renderSlide(
 
   if (s.type === "stat") {
     titleBlock(pptx, slide, s, p);
+    lightLogo(slide, logo);
     const stats = (s.stats ?? []).slice(0, 3);
     const gap = 0.4;
     const cw = (W - MX * 2 - gap * (stats.length - 1)) / Math.max(stats.length, 1);
@@ -221,6 +248,7 @@ function renderSlide(
 
   if (s.type === "twocol") {
     titleBlock(pptx, slide, s, p);
+    lightLogo(slide, logo);
     const colW = (W - MX * 2 - 0.6) / 2;
     const cols: [string | undefined, string[] | undefined, string][] = [
       [s.leftTitle, s.left, "94A3B8"],
@@ -262,6 +290,7 @@ function renderSlide(
 
   if (s.type === "chart" && s.chart) {
     titleBlock(pptx, slide, s, p);
+    lightLogo(slide, logo);
     const c = s.chart;
     const type =
       c.kind === "line"
@@ -291,6 +320,7 @@ function renderSlide(
 
   // bullets (default)
   titleBlock(pptx, slide, s, p);
+  lightLogo(slide, logo);
   slide.addText(
     (s.bullets ?? []).slice(0, 6).map((b) => ({ text: b, options: { bullet: true } })),
     {
@@ -314,27 +344,33 @@ function esc(s: string): string {
   return (s || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function slideHtml(s: Slide, i: number, total: number, p: Palette): string {
+function slideHtml(s: Slide, i: number, total: number, p: Palette, logo?: string): string {
   const primary = `#${p.primary}`;
   const dark = `#${p.primaryDark}`;
   const accent = `#${p.accent}`;
   const light = `#${p.lightBg}`;
+  const corner = logo
+    ? `<img src="${logo}" alt="" style="position:absolute;top:28px;right:64px;height:40px;max-width:180px;object-fit:contain"/>`
+    : "";
+  const chip = logo
+    ? `<div style="position:absolute;top:32px;left:64px;background:#fff;border-radius:10px;padding:8px 12px;box-shadow:0 3px 12px rgba(0,0,0,.18)"><img src="${logo}" alt="" style="height:34px;max-width:160px;object-fit:contain;display:block"/></div>`
+    : "";
   const wrap = (inner: string, style = "") =>
-    `<section class="slide" style="${style}">${inner}<div class="foot"><span>DT Copilot</span><span>${i + 1} / ${total}</span></div></section>`;
+    `<section class="slide" style="${style}">${inner}${corner}<div class="foot"><span>DT Copilot</span><span>${i + 1} / ${total}</span></div></section>`;
   const title = s.title
     ? `<h2>${esc(s.title)}</h2><div class="ul" style="background:${accent}"></div>`
     : "";
 
   if (s.type === "cover" || s.type === "closing")
-    return `<section class="slide" style="background:${dark};color:#fff;justify-content:center">
+    return `<section class="slide" style="background:${dark};color:#fff;justify-content:center">${chip}
       <div class="ul" style="background:${accent};margin-bottom:24px"></div>
       <h1>${esc(s.title || "")}</h1>${s.subtitle ? `<p class="sub">${esc(s.subtitle)}</p>` : ""}</section>`;
   if (s.type === "section")
-    return `<section class="slide" style="background:${dark};color:#fff;justify-content:center">
+    return `<section class="slide" style="background:${dark};color:#fff;justify-content:center">${chip}
       <div style="font-size:90px;font-weight:800;color:${accent}">${String(i + 1).padStart(2, "0")}</div>
       <h2 style="color:#fff">${esc(s.title || "")}</h2></section>`;
   if (s.type === "quote")
-    return `<section class="slide" style="background:${light};justify-content:center;text-align:center">
+    return `<section class="slide" style="background:${light};justify-content:center;text-align:center">${corner}
       <p style="font-size:30px;font-weight:700;color:${dark};line-height:1.4">“${esc(s.quote || "")}”</p>
       ${s.by ? `<p style="color:#64748b">— ${esc(s.by)}</p>` : ""}</section>`;
   if (s.type === "stat") {
@@ -370,14 +406,14 @@ function slideHtml(s: Slide, i: number, total: number, p: Palette): string {
   return wrap(`${title}<ul>${(s.bullets ?? []).slice(0, 6).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`);
 }
 
-export function slidesToPdf(deck: Deck, p: Palette) {
+export function slidesToPdf(deck: Deck, p: Palette, logo?: string) {
   const win = window.open("", "_blank");
   if (!win) {
     alert("เบราว์เซอร์บล็อกหน้าต่างพิมพ์ กรุณาอนุญาต popup แล้วลองใหม่");
     return;
   }
   const body = deck.slides
-    .map((s, i) => slideHtml(s, i, deck.slides.length, p))
+    .map((s, i) => slideHtml(s, i, deck.slides.length, p, logo))
     .join("\n");
   win.document.write(`<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${esc(deck.title)}</title>
   <style>

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useConfig, MODEL_OPTIONS } from "@/lib/config";
+import BrandKitEditor from "@/components/BrandKitEditor";
 
 type TestState =
   | { status: "idle" }
@@ -201,6 +202,8 @@ export default function SettingsPage() {
           </div>
         )}
       </div>
+
+      <BrandKitEditor />
     </div>
   );
 }
