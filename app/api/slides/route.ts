@@ -1,6 +1,7 @@
 import type { NextRequest } from "next/server";
 import { getAgent } from "@/lib/agents";
 import { streamCompletion, overridesFromHeaders } from "@/lib/ai";
+import { guard } from "@/lib/apiauth";
 import { textStreamResponse } from "@/lib/stream";
 import { SLIDE_SCHEMA_HINT, demoDeck } from "@/lib/slides-types";
 
@@ -8,6 +9,9 @@ export const runtime = "nodejs";
 export const maxDuration = 120;
 
 export async function POST(req: NextRequest) {
+  const blocked = await guard(req, { limit: 15 });
+  if (blocked) return blocked;
+
   const body = (await req.json()) as {
     topic?: string;
     audience?: string;

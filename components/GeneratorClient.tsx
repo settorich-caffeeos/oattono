@@ -7,6 +7,7 @@ import { isSupabaseConfigured } from "@/lib/supabase/config";
 import MarkdownView from "./MarkdownView";
 import DocActions from "./DocActions";
 import KnowledgeToggle from "./KnowledgeToggle";
+import FileExtractButton from "./FileExtractButton";
 
 export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
   const [values, setValues] = useState<Record<string, string>>({});
@@ -61,13 +62,26 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
         <div className="space-y-4">
           {mod.fields.map((f) => (
             <div key={f.name}>
-              <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">
-                {f.labelTh}
-                {f.required && <span className="text-rose-500"> *</span>}
-                <span className="ml-1 text-xs font-normal text-slate-400">
-                  {f.label}
-                </span>
-              </label>
+              <div className="mb-1 flex items-center justify-between gap-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-200">
+                  {f.labelTh}
+                  {f.required && <span className="text-rose-500"> *</span>}
+                  <span className="ml-1 text-xs font-normal text-slate-400">
+                    {f.label}
+                  </span>
+                </label>
+                {f.type === "textarea" && (
+                  <FileExtractButton
+                    label="📎 ไฟล์"
+                    onText={(text) =>
+                      setValues((v) => ({
+                        ...v,
+                        [f.name]: v[f.name] ? `${v[f.name]}\n${text}` : text,
+                      }))
+                    }
+                  />
+                )}
+              </div>
               {f.type === "textarea" ? (
                 <textarea
                   rows={4}

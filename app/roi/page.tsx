@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { streamPost } from "@/lib/client";
 import MarkdownView from "@/components/MarkdownView";
 import DocActions from "@/components/DocActions";
+import { BarChart, CashflowChart } from "@/components/Charts";
 
 type Inputs = {
   employees: number;
@@ -68,12 +69,20 @@ export default function RoiPage() {
       currentHoursMonth,
       savedHoursMonth,
       monthlyGross,
+      monthlyNet,
       annualGross,
+      annualCost: inp.annualCost,
       netAnnual,
       roiPct,
       paybackMonths,
     };
   }, [inp]);
+
+  const cashflow = useMemo(
+    () =>
+      Array.from({ length: 25 }, (_, month) => -inp.oneTimeCost + m.monthlyNet * month),
+    [inp.oneTimeCost, m.monthlyNet],
+  );
 
   async function generateNarrative() {
     setLoading(true);
@@ -224,6 +233,33 @@ export default function RoiPage() {
               <dt className="text-slate-500">ผลประหยัด/ปี</dt>
               <dd className="text-right font-medium">{fmt(m.annualGross)} ฿</dd>
             </dl>
+          </div>
+
+          {/* Charts */}
+          <div className="grid gap-6 sm:grid-cols-2">
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+                เปรียบเทียบต่อปี
+              </h3>
+              <BarChart
+                format={(n) => fmt(n) + "฿"}
+                data={[
+                  { label: "ประหยัด", value: m.annualGross, color: "#10b981" },
+                  { label: "ค่าโซลูชัน", value: m.annualCost, color: "#94a3b8" },
+                  {
+                    label: "สุทธิ",
+                    value: m.netAnnual,
+                    color: m.netAnnual >= 0 ? "#4f46e5" : "#f43f5e",
+                  },
+                ]}
+              />
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+                กระแสเงินสะสม (จุดคืนทุน)
+              </h3>
+              <CashflowChart points={cashflow} format={(n) => fmt(n) + "฿"} />
+            </div>
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">

@@ -7,12 +7,16 @@ import {
   type ChatMessage,
 } from "@/lib/ai";
 import { getKnowledgeContext } from "@/lib/knowledge";
+import { guard } from "@/lib/apiauth";
 import { textStreamResponse } from "@/lib/stream";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
+  const blocked = await guard(req, { limit: 30 });
+  if (blocked) return blocked;
+
   const body = (await req.json()) as {
     messages?: ChatMessage[];
     agentId?: string;

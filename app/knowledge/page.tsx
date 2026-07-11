@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
 import AuthNotice from "@/components/AuthNotice";
+import FileExtractButton from "@/components/FileExtractButton";
 
 type Entry = {
   id: string;
@@ -80,9 +81,18 @@ export default function KnowledgePage() {
       <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
         {/* Add form */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">
-            เพิ่มความรู้
-          </h2>
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+              เพิ่มความรู้
+            </h2>
+            <FileExtractButton
+              onText={(text, filename) => {
+                setContent(text);
+                if (!title.trim())
+                  setTitle(filename.replace(/\.[^.]+$/, ""));
+              }}
+            />
+          </div>
           <div className="space-y-3">
             <input
               value={title}
