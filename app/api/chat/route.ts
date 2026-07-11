@@ -1,6 +1,11 @@
 import type { NextRequest } from "next/server";
 import { getAgent } from "@/lib/agents";
-import { streamCompletion, demoChatReply, type ChatMessage } from "@/lib/ai";
+import {
+  streamCompletion,
+  demoChatReply,
+  overridesFromHeaders,
+  type ChatMessage,
+} from "@/lib/ai";
 import { textStreamResponse } from "@/lib/stream";
 
 export const runtime = "nodejs";
@@ -23,6 +28,7 @@ export async function POST(req: NextRequest) {
     messages,
     demo: () => demoChatReply(agent.nameTh, lastUser),
     maxTokens: 4000,
+    ...overridesFromHeaders(req.headers),
   });
 
   return textStreamResponse(gen);

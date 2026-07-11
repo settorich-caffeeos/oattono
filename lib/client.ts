@@ -1,5 +1,7 @@
 "use client";
 
+import { configHeaders } from "./config";
+
 /** POST JSON and invoke onChunk for each streamed text chunk. */
 export async function streamPost(
   url: string,
@@ -9,7 +11,7 @@ export async function streamPost(
 ): Promise<void> {
   const res = await fetch(url, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...configHeaders() },
     body: JSON.stringify(body),
     signal,
   });

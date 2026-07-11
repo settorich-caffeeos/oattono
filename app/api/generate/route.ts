@@ -1,7 +1,12 @@
 import type { NextRequest } from "next/server";
 import { getModule } from "@/lib/modules";
 import { getAgent } from "@/lib/agents";
-import { streamCompletion, buildModulePrompt, demoModuleDoc } from "@/lib/ai";
+import {
+  streamCompletion,
+  buildModulePrompt,
+  demoModuleDoc,
+  overridesFromHeaders,
+} from "@/lib/ai";
 import { textStreamResponse } from "@/lib/stream";
 
 export const runtime = "nodejs";
@@ -25,6 +30,7 @@ export async function POST(req: NextRequest) {
     messages: [{ role: "user", content: userPrompt }],
     demo: () => demoModuleDoc(mod, values),
     maxTokens: 8000,
+    ...overridesFromHeaders(req.headers),
   });
 
   return textStreamResponse(gen);

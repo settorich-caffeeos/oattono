@@ -3,6 +3,7 @@ import { MODULES } from "@/lib/modules";
 import { AGENTS } from "@/lib/agents";
 import { hasApiKey } from "@/lib/ai";
 import DashboardRecent from "@/components/DashboardRecent";
+import AiStatusBanner from "@/components/AiStatusBanner";
 
 const WORKFLOW = [
   "สร้างโครงการ",
@@ -73,20 +74,8 @@ export default function Dashboard() {
         </div>
       </section>
 
-      {/* Status banner */}
-      {!online && (
-        <div className="mb-8 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-sm text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-200">
-          <span className="font-semibold">โหมดสาธิต:</span> ยังไม่ได้ตั้งค่า{" "}
-          <code className="rounded bg-amber-100 px-1 dark:bg-amber-900/50">
-            ANTHROPIC_API_KEY
-          </code>{" "}
-          — ทุกฟีเจอร์ใช้งานได้และแสดงเนื้อหาตัวอย่าง เพิ่มคีย์ในไฟล์{" "}
-          <code className="rounded bg-amber-100 px-1 dark:bg-amber-900/50">
-            .env.local
-          </code>{" "}
-          เพื่อเปิดใช้งาน Claude เต็มรูปแบบ
-        </div>
-      )}
+      {/* Status banner (hidden when a key is configured server- or client-side) */}
+      <AiStatusBanner serverHasKey={online} />
 
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Quick actions */}

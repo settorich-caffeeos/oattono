@@ -10,25 +10,39 @@ export function hasApiKey(): boolean {
   return !!process.env.ANTHROPIC_API_KEY;
 }
 
+/** Read per-request AI overrides (key/model) sent by the browser config menu. */
+export function overridesFromHeaders(headers: Headers): {
+  apiKey?: string;
+  model?: string;
+} {
+  return {
+    apiKey: headers.get("x-anthropic-key") || undefined,
+    model: headers.get("x-anthropic-model") || undefined,
+  };
+}
+
 /**
- * Stream a completion as plain-text chunks. Uses Claude when ANTHROPIC_API_KEY
- * is set; otherwise falls back to a structured demo response so the whole app
- * remains usable offline / without credentials.
+ * Stream a completion as plain-text chunks. Uses Claude when a key is available
+ * (per-request override or ANTHROPIC_API_KEY env); otherwise falls back to a
+ * structured demo response so the whole app remains usable without credentials.
  */
 export async function* streamCompletion(opts: {
   system: string;
   messages: ChatMessage[];
   demo: () => string;
   maxTokens?: number;
+  apiKey?: string;
+  model?: string;
 }): AsyncGenerator<string> {
-  if (!hasApiKey()) {
+  const apiKey = opts.apiKey || process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
     yield* streamDemo(opts.demo());
     return;
   }
 
-  const client = new Anthropic();
+  const client = new Anthropic({ apiKey });
   const stream = client.messages.stream({
-    model: MODEL,
+    model: opts.model || MODEL,
     max_tokens: opts.maxTokens ?? 8000,
     system: opts.system,
     messages: opts.messages,
