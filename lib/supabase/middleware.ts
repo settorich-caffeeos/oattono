@@ -3,7 +3,15 @@ import { NextResponse, type NextRequest } from "next/server";
 import { SUPABASE_URL, SUPABASE_ANON_KEY, isSupabaseConfigured } from "./config";
 
 // Pages that require login when Supabase auth is configured.
-const PROTECTED = ["/chat", "/modules", "/roi", "/projects", "/profile", "/knowledge"];
+const PROTECTED = [
+  "/chat",
+  "/modules",
+  "/roi",
+  "/present",
+  "/projects",
+  "/profile",
+  "/knowledge",
+];
 
 /** Refresh the Supabase session cookie and gate protected routes. No-op when unconfigured. */
 export async function updateSession(request: NextRequest) {

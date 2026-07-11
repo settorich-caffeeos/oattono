@@ -258,35 +258,11 @@ export const MODULES: ModuleDef[] = [
     emoji: "🎤",
     phase: 1,
     agentId: "presentation-expert",
-    summary: "สร้าง Storyline พร้อม Slide Layout, Bullet, Diagram และ Speaker Notes",
-    outline: [
-      "Storyline (ภาพรวมการเล่าเรื่อง)",
-      "โครงสไลด์ทีละหน้า (Slide-by-slide)",
-    ],
-    fields: [
-      {
-        name: "topic",
-        label: "Presentation topic",
-        labelTh: "หัวข้อการนำเสนอ",
-        type: "text",
-        placeholder: "เช่น แผน Digital Transformation ปี 2026",
-        required: true,
-      },
-      {
-        name: "slides",
-        label: "Number of slides",
-        labelTh: "จำนวนสไลด์โดยประมาณ",
-        type: "select",
-        options: ["5", "8", "10", "12", "15"],
-      },
-      {
-        name: "audience",
-        label: "Audience",
-        labelTh: "ผู้ฟัง",
-        type: "text",
-        placeholder: "เช่น ผู้บริหารระดับสูง",
-      },
-    ],
+    summary:
+      "AI ออกแบบสไลด์สวย ๆ พร้อมพรีวิว, กราฟ, speaker notes และ export PowerPoint / PDF",
+    outline: [],
+    fields: [],
+    route: "/present",
   },
   {
     slug: "research-assistant",
