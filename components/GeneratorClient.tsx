@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ModuleDef } from "@/lib/modules";
 import { streamPost } from "@/lib/client";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
@@ -15,7 +15,13 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [useKnowledge, setUseKnowledge] = useState(false);
+  const [projectParam, setProjectParam] = useState("");
   const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("project");
+    if (p) setProjectParam(p);
+  }, []);
 
   const missingRequired = mod.fields.some(
     (f) => f.required && !(values[f.name] || "").trim(),
@@ -180,6 +186,7 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
                   title={docTitle}
                   content={output}
                   moduleSlug={mod.slug}
+                  defaultProjectId={projectParam}
                 />
               )}
             </div>

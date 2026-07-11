@@ -8,16 +8,18 @@ export default function DocActions({
   title,
   content,
   moduleSlug,
+  defaultProjectId = "",
 }: {
   title: string;
   content: string;
   moduleSlug: string;
+  defaultProjectId?: string;
 }) {
   const { projects, addProject, addDocument, mode } = useProjects();
   const [copied, setCopied] = useState(false);
-  const [saving, setSaving] = useState(false);
+  const [saving, setSaving] = useState(!!defaultProjectId);
   const [busy, setBusy] = useState(false);
-  const [target, setTarget] = useState("");
+  const [target, setTarget] = useState(defaultProjectId);
   const [newName, setNewName] = useState("");
   const [savedMsg, setSavedMsg] = useState("");
 

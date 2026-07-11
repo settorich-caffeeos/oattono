@@ -23,6 +23,7 @@ export default function PresentationBuilder() {
   const [sourceMode, setSourceMode] = useState<"topic" | "project">("topic");
   const [projectId, setProjectId] = useState("");
   const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
+  const [pendingProject, setPendingProject] = useState("");
 
   const activeProject = projects.find((p) => p.id === projectId);
 
@@ -39,6 +40,22 @@ export default function PresentationBuilder() {
       return next;
     });
   }
+
+  // Preselect a project when arriving from /projects (?project=<id>)
+  useEffect(() => {
+    const p = new URLSearchParams(window.location.search).get("project");
+    if (p) {
+      setSourceMode("project");
+      setPendingProject(p);
+    }
+  }, []);
+  useEffect(() => {
+    if (pendingProject && projects.some((x) => x.id === pendingProject)) {
+      chooseProject(pendingProject);
+      setPendingProject("");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projects, pendingProject]);
 
   const [deck, setDeck] = useState<Deck | null>(null);
   const [loading, setLoading] = useState(false);

@@ -1,9 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useProjects, type SavedDoc } from "@/lib/store";
-import { getModule } from "@/lib/modules";
+import { getModule, MODULES } from "@/lib/modules";
 import MarkdownView from "@/components/MarkdownView";
+
+function createHref(slug: string, route: string | undefined, projectId: string) {
+  if (route === "/present") return `/present?project=${projectId}`;
+  if (route) return route;
+  return `/modules/${slug}?project=${projectId}`;
+}
 
 function fmtDate(ts: number): string {
   return new Date(ts).toLocaleString("th-TH", {
@@ -17,6 +24,7 @@ export default function ProjectsPage() {
   const [name, setName] = useState("");
   const [desc, setDesc] = useState("");
   const [viewing, setViewing] = useState<SavedDoc | null>(null);
+  const [createFor, setCreateFor] = useState<string | null>(null);
 
   return (
     <div>
@@ -90,6 +98,39 @@ export default function ProjectsPage() {
                   ลบโครงการ
                 </button>
               </div>
+
+              {/* Create actions */}
+              <div className="mt-4 flex flex-wrap gap-2">
+                <Link
+                  href={`/present?project=${p.id}`}
+                  className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700"
+                >
+                  🎤 สร้างสไลด์นำเสนอ
+                </Link>
+                <button
+                  onClick={() =>
+                    setCreateFor(createFor === p.id ? null : p.id)
+                  }
+                  className="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800"
+                >
+                  ➕ สร้างเอกสาร
+                </button>
+              </div>
+
+              {createFor === p.id && (
+                <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:grid-cols-3 dark:border-slate-700 dark:bg-slate-800/50">
+                  {MODULES.map((m) => (
+                    <Link
+                      key={m.slug}
+                      href={createHref(m.slug, m.route, p.id)}
+                      className="flex items-center gap-2 rounded-lg bg-white px-2.5 py-2 text-sm hover:bg-brand-50 dark:bg-slate-900 dark:hover:bg-slate-800"
+                    >
+                      <span>{m.emoji}</span>
+                      <span className="min-w-0 truncate">{m.titleTh}</span>
+                    </Link>
+                  ))}
+                </div>
+              )}
 
               {p.documents.length > 0 && (
                 <ul className="mt-4 divide-y divide-slate-100 dark:divide-slate-800">
