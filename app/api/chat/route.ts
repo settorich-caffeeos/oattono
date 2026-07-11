@@ -6,6 +6,7 @@ import {
   overridesFromHeaders,
   type ChatMessage,
 } from "@/lib/ai";
+import { getKnowledgeContext } from "@/lib/knowledge";
 import { textStreamResponse } from "@/lib/stream";
 
 export const runtime = "nodejs";
@@ -15,6 +16,7 @@ export async function POST(req: NextRequest) {
   const body = (await req.json()) as {
     messages?: ChatMessage[];
     agentId?: string;
+    useKnowledge?: boolean;
   };
   const messages = (body.messages ?? []).filter(
     (m) => m && (m.role === "user" || m.role === "assistant") && m.content,
@@ -23,8 +25,14 @@ export async function POST(req: NextRequest) {
   const lastUser =
     [...messages].reverse().find((m) => m.role === "user")?.content ?? "";
 
+  let system = agent.system;
+  if (body.useKnowledge && lastUser) {
+    const ctx = await getKnowledgeContext(lastUser);
+    if (ctx) system += ctx;
+  }
+
   const gen = streamCompletion({
-    system: agent.system,
+    system,
     messages,
     demo: () => demoChatReply(agent.nameTh, lastUser),
     maxTokens: 4000,

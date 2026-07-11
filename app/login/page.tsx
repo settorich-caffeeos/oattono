@@ -36,7 +36,9 @@ export default function LoginPage() {
       setError(error.message);
       return;
     }
-    router.push("/profile");
+    const next =
+      new URLSearchParams(window.location.search).get("next") || "/profile";
+    router.push(next);
     router.refresh();
   }
 

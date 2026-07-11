@@ -3,7 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { AGENTS, getAgent } from "@/lib/agents";
 import { streamPost } from "@/lib/client";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import MarkdownView from "@/components/MarkdownView";
+import KnowledgeToggle from "@/components/KnowledgeToggle";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
@@ -12,6 +14,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [useKnowledge, setUseKnowledge] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const agent = getAgent(agentId);
 
@@ -31,7 +34,7 @@ export default function ChatPage() {
     setLoading(true);
     setMessages((m) => [...m, { role: "assistant", content: "" }]);
     try {
-      await streamPost("/api/chat", { messages: next, agentId }, (chunk) => {
+      await streamPost("/api/chat", { messages: next, agentId, useKnowledge }, (chunk) => {
         setMessages((m) => {
           const copy = [...m];
           copy[copy.length - 1] = {
@@ -82,6 +85,12 @@ export default function ChatPage() {
           </button>
         ))}
       </div>
+
+      {isSupabaseConfigured() && (
+        <div className="mb-3">
+          <KnowledgeToggle checked={useKnowledge} onChange={setUseKnowledge} />
+        </div>
+      )}
 
       {/* Conversation */}
       <div

@@ -57,3 +57,49 @@ drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_user();
+
+-- ============================================================
+-- 4) Projects & documents (per-user, cross-device)
+-- ============================================================
+create table if not exists public.projects (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  name        text not null,
+  description text default '',
+  created_at  timestamptz default now()
+);
+alter table public.projects enable row level security;
+drop policy if exists "Projects are owned" on public.projects;
+create policy "Projects are owned" on public.projects
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+
+create table if not exists public.documents (
+  id          uuid primary key default gen_random_uuid(),
+  project_id  uuid not null references public.projects (id) on delete cascade,
+  user_id     uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  module_slug text,
+  title       text,
+  content     text,
+  created_at  timestamptz default now()
+);
+alter table public.documents enable row level security;
+drop policy if exists "Documents are owned" on public.documents;
+create policy "Documents are owned" on public.documents
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+create index if not exists documents_project_idx on public.documents (project_id);
+
+-- ============================================================
+-- 5) Knowledge base (RAG source — organisation documents)
+-- ============================================================
+create table if not exists public.knowledge_base (
+  id         uuid primary key default gen_random_uuid(),
+  user_id    uuid not null default auth.uid() references auth.users (id) on delete cascade,
+  title      text not null,
+  category   text default '',
+  content    text not null,
+  created_at timestamptz default now()
+);
+alter table public.knowledge_base enable row level security;
+drop policy if exists "Knowledge is owned" on public.knowledge_base;
+create policy "Knowledge is owned" on public.knowledge_base
+  for all using (auth.uid() = user_id) with check (auth.uid() = user_id);

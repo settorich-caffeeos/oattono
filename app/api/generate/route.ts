@@ -7,6 +7,7 @@ import {
   demoModuleDoc,
   overridesFromHeaders,
 } from "@/lib/ai";
+import { getKnowledgeContext } from "@/lib/knowledge";
 import { textStreamResponse } from "@/lib/stream";
 
 export const runtime = "nodejs";
@@ -16,6 +17,7 @@ export async function POST(req: NextRequest) {
   const body = (await req.json()) as {
     slug?: string;
     values?: Record<string, string>;
+    useKnowledge?: boolean;
   };
   const mod = body.slug ? getModule(body.slug) : undefined;
   if (!mod) {
@@ -25,8 +27,14 @@ export async function POST(req: NextRequest) {
   const agent = getAgent(mod.agentId);
   const { userPrompt } = buildModulePrompt(mod, values);
 
+  let system = agent.system;
+  if (body.useKnowledge) {
+    const ctx = await getKnowledgeContext(Object.values(values).join(" "));
+    if (ctx) system += ctx;
+  }
+
   const gen = streamCompletion({
-    system: agent.system,
+    system,
     messages: [{ role: "user", content: userPrompt }],
     demo: () => demoModuleDoc(mod, values),
     maxTokens: 8000,

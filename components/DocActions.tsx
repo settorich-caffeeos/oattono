@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useProjects } from "@/lib/store";
+import { exportDocx, exportPptx, exportPdf } from "@/lib/export";
 
 export default function DocActions({
   title,
@@ -12,9 +13,10 @@ export default function DocActions({
   content: string;
   moduleSlug: string;
 }) {
-  const { projects, addProject, addDocument } = useProjects();
+  const { projects, addProject, addDocument, mode } = useProjects();
   const [copied, setCopied] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [busy, setBusy] = useState(false);
   const [target, setTarget] = useState("");
   const [newName, setNewName] = useState("");
   const [savedMsg, setSavedMsg] = useState("");
@@ -25,7 +27,7 @@ export default function DocActions({
     setTimeout(() => setCopied(false), 1500);
   }
 
-  function download() {
+  function downloadMd() {
     const blob = new Blob([content], { type: "text/markdown;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -35,32 +37,47 @@ export default function DocActions({
     URL.revokeObjectURL(url);
   }
 
-  function save() {
-    let projectId = target;
-    if (!projectId && newName.trim()) {
-      projectId = addProject(newName).id;
+  async function save() {
+    setBusy(true);
+    try {
+      let projectId = target;
+      if (!projectId && newName.trim()) {
+        const p = await addProject(newName);
+        projectId = p?.id ?? "";
+      }
+      if (!projectId) {
+        setSavedMsg("เลือกโครงการหรือตั้งชื่อโครงการใหม่ก่อน");
+        return;
+      }
+      await addDocument(projectId, { moduleSlug, title, content });
+      setSavedMsg("บันทึกเข้าโครงการแล้ว ✓");
+      setSaving(false);
+      setNewName("");
+      setTimeout(() => setSavedMsg(""), 2500);
+    } finally {
+      setBusy(false);
     }
-    if (!projectId) {
-      setSavedMsg("เลือกโครงการหรือตั้งชื่อโครงการใหม่ก่อน");
-      return;
-    }
-    addDocument(projectId, { moduleSlug, title, content });
-    setSavedMsg("บันทึกเข้าโครงการแล้ว ✓");
-    setSaving(false);
-    setNewName("");
-    setTimeout(() => setSavedMsg(""), 2500);
   }
 
   const btn =
-    "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700";
+    "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700";
 
   return (
     <div className="flex flex-wrap items-center gap-2">
       <button className={btn} onClick={copy}>
         {copied ? "คัดลอกแล้ว ✓" : "คัดลอก"}
       </button>
-      <button className={btn} onClick={download}>
-        ดาวน์โหลด .md
+      <button className={btn} onClick={() => exportDocx(title, content)}>
+        Word
+      </button>
+      <button className={btn} onClick={() => exportPptx(title, content)}>
+        PowerPoint
+      </button>
+      <button className={btn} onClick={() => exportPdf(title, content)}>
+        PDF
+      </button>
+      <button className={btn} onClick={downloadMd}>
+        .md
       </button>
       <button className={btn} onClick={() => setSaving((v) => !v)}>
         บันทึกเข้าโครงการ
@@ -94,10 +111,16 @@ export default function DocActions({
           />
           <button
             onClick={save}
-            className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700"
+            disabled={busy}
+            className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 disabled:opacity-50"
           >
-            บันทึก
+            {busy ? "กำลังบันทึก…" : "บันทึก"}
           </button>
+          {mode === "supabase" && (
+            <span className="w-full text-xs text-slate-400">
+              บันทึกในบัญชีของคุณ (เข้าถึงได้ทุกอุปกรณ์)
+            </span>
+          )}
         </div>
       )}
     </div>

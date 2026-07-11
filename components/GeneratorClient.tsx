@@ -3,14 +3,17 @@
 import { useRef, useState } from "react";
 import type { ModuleDef } from "@/lib/modules";
 import { streamPost } from "@/lib/client";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import MarkdownView from "./MarkdownView";
 import DocActions from "./DocActions";
+import KnowledgeToggle from "./KnowledgeToggle";
 
 export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
   const [values, setValues] = useState<Record<string, string>>({});
   const [output, setOutput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [useKnowledge, setUseKnowledge] = useState(false);
   const abortRef = useRef<AbortController | null>(null);
 
   const missingRequired = mod.fields.some(
@@ -26,7 +29,7 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
     try {
       await streamPost(
         "/api/generate",
-        { slug: mod.slug, values },
+        { slug: mod.slug, values, useKnowledge },
         (chunk) => setOutput((prev) => prev + chunk),
         ctrl.signal,
       );
@@ -103,6 +106,12 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
             </div>
           ))}
         </div>
+
+        {isSupabaseConfigured() && (
+          <div className="mt-4">
+            <KnowledgeToggle checked={useKnowledge} onChange={setUseKnowledge} />
+          </div>
+        )}
 
         <div className="mt-5 flex items-center gap-2">
           {!loading ? (

@@ -10,6 +10,7 @@ const NAV = [
   { href: "/chat", label: "AI Chat", sub: "คุยกับผู้เชี่ยวชาญ", emoji: "💬" },
   { href: "/modules", label: "โมดูล", sub: "14 Core Modules", emoji: "🧰" },
   { href: "/roi", label: "ROI Calculator", sub: "คำนวณความคุ้มค่า", emoji: "🧮" },
+  { href: "/knowledge", label: "คลังความรู้", sub: "Knowledge / RAG", emoji: "📚" },
   { href: "/projects", label: "โครงการ", sub: "Projects", emoji: "📁" },
   { href: "/settings", label: "ตั้งค่า", sub: "API Key / Model", emoji: "⚙️" },
 ];
