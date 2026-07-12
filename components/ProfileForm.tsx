@@ -38,7 +38,7 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
   }
 
   return (
-    <div className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+    <div className="space-y-4 card-lux p-6">
       <div>
         <label className="mb-1 block text-sm font-medium">อีเมล</label>
         <input

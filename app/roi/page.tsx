@@ -154,11 +154,12 @@ export default function RoiPage() {
   return (
     <div>
       <header className="mb-6 flex items-start gap-4">
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-3xl dark:bg-brand-900/30">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-gold-50 text-3xl dark:from-brand-900/30 dark:to-gold-500/10">
           🧮
         </span>
         <div>
-          <h1 className="text-2xl font-bold">ROI Calculator</h1>
+          <div className="hairline-gold mb-2" />
+          <h1 className="text-2xl font-bold font-display tracking-tight">ROI Calculator</h1>
           <p className="text-slate-500 dark:text-slate-400">
             คำนวณความคุ้มค่าของโครงการจากเวลาและต้นทุนที่ประหยัดได้
           </p>
@@ -167,8 +168,8 @@ export default function RoiPage() {
 
       <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
         {/* Inputs */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-          <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">
+        <div className="card-lux p-5">
+          <h2 className="eyebrow mb-4 text-slate-400">
             สมมติฐาน
           </h2>
           <div className="space-y-3">
@@ -205,7 +206,7 @@ export default function RoiPage() {
             {metricCards.map((c) => (
               <div
                 key={c.label}
-                className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+                className="card-lux p-5"
               >
                 <p className="text-xs text-slate-400">{c.label}</p>
                 <p className={`mt-1 text-2xl font-bold ${c.accent}`}>
@@ -215,8 +216,8 @@ export default function RoiPage() {
             ))}
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+          <div className="card-lux p-5">
+            <h3 className="eyebrow mb-3 text-slate-400">
               รายละเอียดการคำนวณ
             </h3>
             <dl className="grid grid-cols-2 gap-y-2 text-sm">
@@ -237,8 +238,8 @@ export default function RoiPage() {
 
           {/* Charts */}
           <div className="grid gap-6 sm:grid-cols-2">
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <div className="card-lux p-5">
+              <h3 className="eyebrow mb-3 text-slate-400">
                 เปรียบเทียบต่อปี
               </h3>
               <BarChart
@@ -254,17 +255,17 @@ export default function RoiPage() {
                 ]}
               />
             </div>
-            <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-              <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <div className="card-lux p-5">
+              <h3 className="eyebrow mb-3 text-slate-400">
                 กระแสเงินสะสม (จุดคืนทุน)
               </h3>
               <CashflowChart points={cashflow} format={(n) => fmt(n) + "฿"} />
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+          <div className="card-lux p-5">
             <div className="mb-3 flex items-center justify-between gap-2">
-              <h3 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+              <h3 className="eyebrow text-slate-400">
                 บทวิเคราะห์ด้วย AI
               </h3>
               {!loading ? (

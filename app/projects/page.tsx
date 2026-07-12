@@ -29,7 +29,8 @@ export default function ProjectsPage() {
   return (
     <div>
       <header className="mb-6">
-        <h1 className="text-2xl font-bold">โครงการ</h1>
+        <div className="hairline-gold mb-2" />
+        <h1 className="font-display text-2xl font-bold tracking-tight">โครงการ</h1>
         <p className="text-slate-500 dark:text-slate-400">
           รวบรวมเอกสารที่สร้างจากโมดูลต่าง ๆ เข้าเป็นโครงการเดียว
           (บันทึกในเบราว์เซอร์ของคุณ)
@@ -37,8 +38,8 @@ export default function ProjectsPage() {
       </header>
 
       {/* Create */}
-      <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+      <div className="mb-8 card-lux p-5">
+        <h2 className="mb-3 eyebrow text-slate-400">
           สร้างโครงการใหม่
         </h2>
         <div className="flex flex-col gap-3 sm:flex-row">
@@ -77,7 +78,7 @@ export default function ProjectsPage() {
           {projects.map((p) => (
             <div
               key={p.id}
-              className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
+              className="card-lux p-5"
             >
               <div className="flex items-start justify-between gap-3">
                 <div>
@@ -184,7 +185,7 @@ export default function ProjectsPage() {
             className="absolute inset-0 bg-slate-900/50"
             onClick={() => setViewing(null)}
           />
-          <div className="relative flex max-h-[85vh] w-full max-w-3xl flex-col rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <div className="relative flex max-h-[85vh] w-full max-w-3xl flex-col card-lux">
             <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3 dark:border-slate-800">
               <h3 className="truncate font-semibold">{viewing.title}</h3>
               <button
