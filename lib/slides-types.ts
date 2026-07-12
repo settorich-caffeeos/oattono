@@ -88,10 +88,115 @@ export const PALETTES: Palette[] = [
     bg: "FFFFFF",
     lightBg: "FFFBEB",
   },
+
+  /**
+   * ธีมแบรนด์ระดับโปร — สีเอกลักษณ์ดึงจากชุด Open Design (nexu-io/open-design,
+   * Apache-2.0) ปรับเป็นสไลด์พื้นสว่างให้เหมาะกับงานนำเสนอ/พรินต์/โปรเจกเตอร์
+   */
+  {
+    id: "stripe",
+    name: "Stripe — ม่วงพรีเมียม",
+    primary: "635BFF",
+    primaryDark: "3A2FB0",
+    accent: "EA2261",
+    text: "0A2540",
+    bg: "FFFFFF",
+    lightBg: "F1F1FE",
+  },
+  {
+    id: "linear",
+    name: "Linear — อินดิโกมินิมอล",
+    primary: "5E6AD2",
+    primaryDark: "2A2B45",
+    accent: "7170FF",
+    text: "1D1D1F",
+    bg: "FFFFFF",
+    lightBg: "F1F2FB",
+  },
+  {
+    id: "notion",
+    name: "Notion — ฟ้าอุ่นสะอาด",
+    primary: "0075DE",
+    primaryDark: "005BAB",
+    accent: "37A0F4",
+    text: "32302C",
+    bg: "FFFFFF",
+    lightBg: "F6F5F4",
+  },
+  {
+    id: "vercel",
+    name: "Vercel — ดำ-แดงคมกริบ",
+    primary: "171717",
+    primaryDark: "000000",
+    accent: "FF5B4F",
+    text: "171717",
+    bg: "FFFFFF",
+    lightBg: "FAFAFA",
+  },
+  {
+    id: "spotify",
+    name: "Spotify — เขียวสดใส",
+    primary: "1DB954",
+    primaryDark: "0F7A38",
+    accent: "F3727F",
+    text: "121212",
+    bg: "FFFFFF",
+    lightBg: "ECFBF1",
+  },
+  {
+    id: "supabase",
+    name: "Supabase — เขียวมรกต",
+    primary: "249E6B",
+    primaryDark: "0B6E48",
+    accent: "3ECF8E",
+    text: "1F2937",
+    bg: "FFFFFF",
+    lightBg: "ECFDF5",
+  },
+  {
+    id: "apple",
+    name: "Apple — น้ำเงินคลาสสิก",
+    primary: "0071E3",
+    primaryDark: "0066CC",
+    accent: "1D1D1F",
+    text: "1D1D1F",
+    bg: "FFFFFF",
+    lightBg: "F5F5F7",
+  },
 ];
 
 export function getPalette(id: string): Palette {
   return PALETTES.find((p) => p.id === id) ?? PALETTES[0];
+}
+
+/**
+ * "สไตล์การเล่าเรื่อง" ต่อธีม — แปลจิตวิญญาณดีไซน์ของแต่ละแบรนด์
+ * (จาก Open Design) เป็นแนวทางการวางเนื้อหา/โทน ที่ฉีดเข้า prompt ของ AI
+ * เพื่อให้สไลด์ "เป็นตัว" แบรนด์นั้นจริง ไม่ใช่แค่เปลี่ยนสี
+ */
+export const PALETTE_VIBES: Record<string, string> = {
+  indigo: "โทนแอปมาตรฐาน สมดุล เป็นทางการเล็กน้อย อ่านง่าย",
+  teal: "สดชื่น เน้นนวัตกรรมและความยั่งยืน โทนบวกมองไปข้างหน้า",
+  slate: "ทางการ ระดับองค์กร น่าเชื่อถือ เนื้อหาแน่นเป็นระบบ",
+  amber: "อบอุ่น มีพลัง เน้นการลงมือทำและ Quick Win",
+  stripe:
+    "พรีเมียมสาย fintech — เน้นตัวเลข ROI/ผลลัพธ์ ใช้สไลด์ stat และ chart ให้มาก ถ้อยคำมั่นใจกระชับ ดูน่าลงทุน",
+  linear:
+    "มินิมอลเชิงวิศวกรรม — เนื้อหาแม่นยำ ตรงประเด็น กระชับที่สุด หลีกเลี่ยงคำฟุ่มเฟือย bullet สั้นคม",
+  notion:
+    "เป็นมิตร เข้าถึงง่าย — อธิบายเป็นขั้นตอนชัดเจน โทนสบายแต่มืออาชีพ เหมาะสื่อสารในวงกว้าง",
+  vercel:
+    "โมเดิร์นมินิมอลจัด — ประโยคสั้นทรงพลัง ถ้อยคำน้อยแต่คม ใช้ section/quote คั่นจังหวะ แต่ละสไลด์มีสารหลักเดียว",
+  spotify:
+    "สดใสมีพลัง — เล่าเป็นเรื่อง เน้นอิมแพ็กต์ที่มีต่อคน ใช้ตัวเลขและ quote สร้างอารมณ์ร่วม",
+  supabase:
+    "สายเทคโนโลยี/นักพัฒนา — ตรงไปตรงมา เน้นสถาปัตยกรรม ความสามารถ และผลลัพธ์เชิงเทคนิคที่วัดได้",
+  apple:
+    "หรูเรียบ — ถ้อยคำน้อยแต่ทรงพลัง เน้นสไลด์ใหญ่ ตัวเลขเด่น ใช้ section/stat/quote เยอะ ให้แต่ละสไลด์โฟกัสข้อความเดียว",
+};
+
+export function getPaletteVibe(id: string): string {
+  return PALETTE_VIBES[id] ?? "";
 }
 
 /** Robustly pull a Deck JSON object out of model output (handles ```json fences / prose). */

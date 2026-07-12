@@ -18,14 +18,18 @@ export async function POST(req: NextRequest) {
     count?: string;
     tone?: string;
     source?: string;
+    style?: string;
   };
   const topic = (body.topic || "").trim();
   const source = (body.source || "").trim().slice(0, 16000);
+  const style = (body.style || "").trim().slice(0, 300);
   const agent = getAgent("presentation-expert");
 
   const common = `กลุ่มผู้ฟัง: ${body.audience || "ผู้บริหาร"}
 จำนวนสไลด์โดยประมาณ: ${body.count || "10"}
-โทน/จุดเน้น: ${body.tone || "กระชับ โน้มน้าว เชื่อมโยงกลยุทธ์องค์กร"}
+โทน/จุดเน้น: ${body.tone || "กระชับ โน้มน้าว เชื่อมโยงกลยุทธ์องค์กร"}${
+    style ? `\nสไตล์การเล่าเรื่อง/ดีไซน์ (ปรับโครงเรื่องและถ้อยคำให้เข้ากับสไตล์นี้): ${style}` : ""
+  }
 
 ออกแบบ storyline ที่ลื่นไหล เลือกใช้ประเภทสไลด์ให้หลากหลาย (stat สำหรับตัวเลขเด่น, twocol สำหรับเปรียบเทียบ, chart เมื่อมีข้อมูลเชิงปริมาณ) และเขียน speaker notes ที่นำไปพูดได้จริง`;
 

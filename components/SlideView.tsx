@@ -8,11 +8,13 @@ export default function SlideView({
   palette,
   index,
   total,
+  logo,
 }: {
   slide: Slide;
   palette: Palette;
   index: number;
   total: number;
+  logo?: string;
 }) {
   const primary = `#${palette.primary}`;
   const primaryDark = `#${palette.primaryDark}`;
@@ -34,6 +36,45 @@ export default function SlideView({
   };
 
   const pad: CSSProperties = { position: "absolute", inset: 0, padding: "7cqw 8cqw" };
+
+  // โลโก้มุมขวาบน (สไลด์เนื้อหาพื้นสว่าง)
+  const cornerLogo = logo ? (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src={logo}
+      alt=""
+      style={{
+        position: "absolute",
+        top: "5cqh",
+        right: "8cqw",
+        height: "7cqh",
+        maxWidth: "22cqw",
+        objectFit: "contain",
+      }}
+    />
+  ) : null;
+
+  // โลโก้บนพื้นเข้ม (cover/section/closing) — วางในชิปขาวให้เห็นชัดทุกโลโก้
+  const chipLogo = logo ? (
+    <div
+      style={{
+        position: "absolute",
+        top: "6cqh",
+        left: "8cqw",
+        background: "#fff",
+        borderRadius: "1.4cqw",
+        padding: "1.4cqh 2cqw",
+        boxShadow: "0 0.4cqh 1.6cqw rgba(0,0,0,0.18)",
+      }}
+    >
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={logo}
+        alt=""
+        style={{ height: "6cqh", maxWidth: "20cqw", objectFit: "contain", display: "block" }}
+      />
+    </div>
+  ) : null;
 
   const footer = (
     <div
@@ -82,6 +123,7 @@ export default function SlideView({
           color: "#fff",
         }}
       >
+        {chipLogo}
         <div
           style={{
             ...pad,
@@ -115,6 +157,7 @@ export default function SlideView({
   if (slide.type === "section") {
     return (
       <div style={{ ...base, background: primaryDark, color: "#fff" }}>
+        {chipLogo}
         <div style={{ ...pad, display: "flex", flexDirection: "column", justifyContent: "center" }}>
           <span style={{ fontSize: "9cqw", fontWeight: 800, color: accent, lineHeight: 1 }}>
             {String(index + 1).padStart(2, "0")}
@@ -141,6 +184,7 @@ export default function SlideView({
             <p style={{ fontSize: "3cqw", color: "#64748b" }}>— {slide.by}</p>
           )}
         </div>
+        {cornerLogo}
         {footer}
       </div>
     );
@@ -175,6 +219,7 @@ export default function SlideView({
             ))}
           </div>
         </div>
+        {cornerLogo}
         {footer}
       </div>
     );
@@ -218,6 +263,7 @@ export default function SlideView({
             {col(slide.rightTitle, slide.right, primary)}
           </div>
         </div>
+        {cornerLogo}
         {footer}
       </div>
     );
@@ -266,6 +312,7 @@ export default function SlideView({
             </div>
           )}
         </div>
+        {cornerLogo}
         {footer}
       </div>
     );

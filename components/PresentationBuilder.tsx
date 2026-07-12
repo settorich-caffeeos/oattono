@@ -5,16 +5,18 @@ import { streamPost } from "@/lib/client";
 import { useProjects } from "@/lib/store";
 import {
   PALETTES,
-  getPalette,
   extractDeck,
   deckToMarkdown,
+  getPaletteVibe,
   type Deck,
 } from "@/lib/slides-types";
 import { slidesToPptx, slidesToPdf } from "@/lib/slides-export";
+import { useBrandKit, brandKitToPalette } from "@/lib/brandkit";
 import SlideView from "./SlideView";
 
 export default function PresentationBuilder() {
   const { projects, addProject, addDocument } = useProjects();
+  const { brandKit } = useBrandKit();
   const [topic, setTopic] = useState("");
   const [audience, setAudience] = useState("ผู้บริหารระดับสูง");
   const [count, setCount] = useState("10");
@@ -69,7 +71,13 @@ export default function PresentationBuilder() {
   const [newName, setNewName] = useState("");
   const [savedMsg, setSavedMsg] = useState("");
 
-  const palette = getPalette(paletteId);
+  // ตัวเลือกธีม = ธีมสำเร็จรูป + Brand Kit ของผู้ใช้ (ถ้ามี)
+  const paletteOptions = brandKit
+    ? [...PALETTES, brandKitToPalette(brandKit)]
+    : PALETTES;
+  const palette =
+    paletteOptions.find((p) => p.id === paletteId) ?? PALETTES[0];
+  const logo = paletteId === "brandkit" ? brandKit?.logo : undefined;
   const rawRef = useRef("");
 
   const fromProject = sourceMode === "project";
@@ -98,7 +106,7 @@ export default function PresentationBuilder() {
     try {
       await streamPost(
         "/api/slides",
-        { topic: effectiveTopic, audience, count, tone, source },
+        { topic: effectiveTopic, audience, count, tone, source, style: getPaletteVibe(paletteId) },
         (chunk) => {
           rawRef.current += chunk;
         },
@@ -274,7 +282,7 @@ export default function PresentationBuilder() {
                 onChange={(e) => setPaletteId(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"
               >
-                {PALETTES.map((p) => (
+                {paletteOptions.map((p) => (
                   <option key={p.id} value={p.id}>
                     {p.name}
                   </option>
@@ -344,10 +352,10 @@ export default function PresentationBuilder() {
               >
                 ▶ นำเสนอ
               </button>
-              <button className={btn} onClick={() => slidesToPptx(deck, palette)}>
+              <button className={btn} onClick={() => slidesToPptx(deck, palette, logo)}>
                 PowerPoint
               </button>
-              <button className={btn} onClick={() => slidesToPdf(deck, palette)}>
+              <button className={btn} onClick={() => slidesToPdf(deck, palette, logo)}>
                 PDF
               </button>
               <button className={btn} onClick={() => setSaveOpen((v) => !v)}>
@@ -397,6 +405,7 @@ export default function PresentationBuilder() {
                 palette={palette}
                 index={current}
                 total={deck.slides.length}
+                logo={logo}
               />
             </div>
 
@@ -443,7 +452,7 @@ export default function PresentationBuilder() {
                       : "border-transparent hover:border-slate-300"
                   }`}
                 >
-                  <SlideView slide={s} palette={palette} index={i} total={deck.slides.length} />
+                  <SlideView slide={s} palette={palette} index={i} total={deck.slides.length} logo={logo} />
                 </button>
               ))}
             </div>
@@ -472,6 +481,7 @@ export default function PresentationBuilder() {
                 palette={palette}
                 index={current}
                 total={deck.slides.length}
+                logo={logo}
               />
             </div>
           </div>
