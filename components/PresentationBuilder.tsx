@@ -6,7 +6,6 @@ import { useProjects } from "@/lib/store";
 import {
   PALETTES,
   extractDeck,
-  deckToMarkdown,
   getPaletteVibe,
   type Deck,
 } from "@/lib/slides-types";
@@ -27,6 +26,7 @@ export default function PresentationBuilder() {
   const [projectId, setProjectId] = useState("");
   const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
   const [pendingProject, setPendingProject] = useState("");
+  const [pendingDoc, setPendingDoc] = useState("");
 
   const activeProject = projects.find((p) => p.id === projectId);
 
@@ -53,6 +53,8 @@ export default function PresentationBuilder() {
       setPendingProject(p);
     }
     if (params.get("preset") === "pitch") setPreset("pitch");
+    const d = params.get("doc");
+    if (d) setPendingDoc(d);
   }, []);
   useEffect(() => {
     if (pendingProject && projects.some((x) => x.id === pendingProject)) {
@@ -140,6 +142,23 @@ export default function PresentationBuilder() {
     return () => window.removeEventListener("keydown", onKey);
   }, [presenting, deck]);
 
+  // Reopen a saved deck from a project (?doc=<documentId>) as an editable slide deck
+  useEffect(() => {
+    if (!pendingDoc) return;
+    for (const pr of projects) {
+      const found = pr.documents.find((x) => x.id === pendingDoc);
+      if (found) {
+        const parsed = extractDeck(found.content);
+        if (parsed && parsed.slides.length) {
+          setDeck(parsed);
+          setCurrent(0);
+        }
+        setPendingDoc("");
+        return;
+      }
+    }
+  }, [projects, pendingDoc]);
+
   async function save() {
     if (!deck) return;
     let projectId = target;
@@ -154,7 +173,8 @@ export default function PresentationBuilder() {
     await addDocument(projectId, {
       moduleSlug: "presentation-builder",
       title: deck.title,
-      content: deckToMarkdown(deck),
+      // เก็บ deck เป็น JSON เพื่อให้เปิดกลับมาแก้ไข/นำเสนอ/export เป็นสไลด์ได้
+      content: JSON.stringify(deck),
     });
     setSavedMsg("บันทึกแล้ว ✓");
     setSaveOpen(false);
