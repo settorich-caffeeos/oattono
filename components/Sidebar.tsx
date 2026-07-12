@@ -8,11 +8,11 @@ import AuthNav from "./AuthNav";
 const NAV = [
   { href: "/", label: "แดชบอร์ด", sub: "Dashboard", emoji: "🏠" },
   { href: "/chat", label: "AI Chat", sub: "คุยกับผู้เชี่ยวชาญ", emoji: "💬" },
-  { href: "/modules", label: "โมดูล", sub: "14 Core Modules", emoji: "🧰" },
+  { href: "/modules", label: "โมดูล", sub: "15 Core Modules", emoji: "🧰" },
   { href: "/roi", label: "ROI Calculator", sub: "คำนวณความคุ้มค่า", emoji: "🧮" },
   { href: "/knowledge", label: "คลังความรู้", sub: "Knowledge / RAG", emoji: "📚" },
   { href: "/projects", label: "โครงการ", sub: "Projects", emoji: "📁" },
-  { href: "/settings", label: "ตั้งค่า", sub: "API Key / Model", emoji: "⚙️" },
+  { href: "/settings", label: "ตั้งค่า", sub: "API Key / Brand Kit", emoji: "⚙️" },
 ];
 
 function isActive(pathname: string, href: string): boolean {
@@ -26,6 +26,9 @@ export default function Sidebar() {
 
   const nav = (
     <nav className="flex flex-col gap-1">
+      <p className="mb-2 px-3 text-[0.68rem] font-semibold uppercase tracking-[0.18em] text-white/35">
+        Workspace
+      </p>
       {NAV.map((item) => {
         const active = isActive(pathname, item.href);
         return (
@@ -33,22 +36,31 @@ export default function Sidebar() {
             key={item.href}
             href={item.href}
             onClick={() => setOpen(false)}
-            className={`group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-colors ${
+            className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
               active
-                ? "bg-brand-600 text-white shadow-sm"
-                : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70"
+                ? "bg-white/[0.07] text-white ring-1 ring-inset ring-gold-400/25"
+                : "text-slate-300 hover:bg-white/[0.04] hover:text-white"
             }`}
           >
-            <span className="text-lg leading-none">{item.emoji}</span>
+            {active && (
+              <span className="absolute left-0 top-1/2 h-6 w-[3px] -translate-y-1/2 rounded-r-full bg-gradient-to-b from-gold-300 to-gold-500" />
+            )}
+            <span
+              className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-base transition ${
+                active
+                  ? "bg-gradient-to-br from-gold-300/20 to-gold-500/10 ring-1 ring-gold-400/30"
+                  : "bg-white/[0.04] group-hover:bg-white/[0.07]"
+              }`}
+            >
+              {item.emoji}
+            </span>
             <span className="min-w-0">
               <span className="block font-medium leading-tight">
                 {item.label}
               </span>
               <span
                 className={`block text-xs leading-tight ${
-                  active
-                    ? "text-brand-100"
-                    : "text-slate-400 dark:text-slate-500"
+                  active ? "text-gold-200/80" : "text-slate-500"
                 }`}
               >
                 {item.sub}
@@ -61,16 +73,20 @@ export default function Sidebar() {
   );
 
   const brand = (
-    <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 text-lg font-bold text-white shadow-sm">
+    <Link
+      href="/"
+      className="flex items-center gap-3"
+      onClick={() => setOpen(false)}
+    >
+      <span className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-gold-300 to-gold-500 font-serif text-lg font-bold text-ink-900 shadow-lg ring-1 ring-white/20">
         DT
       </span>
       <span>
-        <span className="block text-base font-semibold leading-tight">
+        <span className="block font-serif text-lg font-semibold leading-tight tracking-tight text-white">
           DT Copilot
         </span>
-        <span className="block text-xs text-slate-400">
-          AI Transformation Workspace
+        <span className="block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-gold-300/80">
+          Business Exclusive
         </span>
       </span>
     </Link>
@@ -79,14 +95,21 @@ export default function Sidebar() {
   return (
     <>
       {/* Mobile top bar */}
-      <div className="fixed inset-x-0 top-0 z-30 flex items-center justify-between border-b border-slate-200 bg-white/90 px-4 py-3 backdrop-blur lg:hidden dark:border-slate-800 dark:bg-slate-900/90">
+      <div className="fixed inset-x-0 top-0 z-30 flex items-center justify-between border-b border-white/10 bg-ink-900/90 px-4 py-3 backdrop-blur lg:hidden">
         {brand}
         <button
           aria-label="เปิดเมนู"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-lg border border-slate-200 p-2 text-slate-600 dark:border-slate-700 dark:text-slate-300"
+          className="rounded-lg border border-white/15 p-2 text-slate-200"
         >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             <line x1="3" y1="6" x2="21" y2="6" />
             <line x1="3" y1="12" x2="21" y2="12" />
             <line x1="3" y1="18" x2="21" y2="18" />
@@ -94,36 +117,41 @@ export default function Sidebar() {
         </button>
       </div>
       {/* Spacer so content clears the mobile bar */}
-      <div className="h-[61px] lg:hidden" />
+      <div className="h-[63px] lg:hidden" />
 
       {/* Mobile drawer */}
       {open && (
         <div className="fixed inset-0 z-40 lg:hidden">
           <div
-            className="absolute inset-0 bg-slate-900/40"
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => setOpen(false)}
           />
-          <div className="absolute inset-y-0 left-0 w-72 overflow-y-auto border-r border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900">
-            <div className="mb-6">{brand}</div>
+          <div className="absolute inset-y-0 left-0 flex w-72 flex-col overflow-y-auto bg-gradient-to-b from-ink-800 to-ink-950 p-4">
+            <div className="mb-8">{brand}</div>
             {nav}
             <div className="mt-6">
-              <AuthNav onNavigate={() => setOpen(false)} />
+              <AuthNav onNavigate={() => setOpen(false)} onDark />
             </div>
           </div>
         </div>
       )}
 
       {/* Desktop sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 flex-col border-r border-slate-200 bg-white p-4 lg:flex dark:border-slate-800 dark:bg-slate-900">
-        <div className="mb-8 px-1">{brand}</div>
-        {nav}
-        <div className="mt-auto space-y-3">
-          <AuthNav />
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-500 dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-400">
-            <p className="font-medium text-slate-600 dark:text-slate-300">
+      <aside className="fixed inset-y-0 left-0 z-20 hidden w-72 flex-col overflow-hidden border-r border-white/[0.06] bg-gradient-to-b from-ink-800 to-ink-950 p-4 lg:flex">
+        {/* subtle gold glow at top */}
+        <div className="pointer-events-none absolute -top-24 left-1/2 h-48 w-72 -translate-x-1/2 rounded-full bg-gold-400/10 blur-3xl" />
+        <div className="relative mb-9 px-1 pt-1">{brand}</div>
+        <div className="relative">{nav}</div>
+        <div className="relative mt-auto space-y-3">
+          <AuthNav onDark />
+          <div className="overflow-hidden rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+            <div className="hairline-gold mb-2.5" />
+            <p className="text-sm font-semibold text-white">
               ลดเวลาทำเอกสาร
             </p>
-            <p>จาก 2–5 วัน เหลือ 15–30 นาที</p>
+            <p className="text-xs text-slate-400">
+              จาก 2–5 วัน เหลือ <span className="text-gold-300">15–30 นาที</span>
+            </p>
           </div>
         </div>
       </aside>

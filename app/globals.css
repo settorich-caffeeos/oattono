@@ -3,6 +3,8 @@
 @theme {
   --font-sans: "Inter", "IBM Plex Sans Thai", "Noto Sans Thai", system-ui,
     -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: ui-serif, Georgia, "Times New Roman", "Noto Serif Thai", serif;
+
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
   --color-brand-200: #c7d2fe;
@@ -13,6 +15,21 @@
   --color-brand-700: #4338ca;
   --color-brand-800: #3730a3;
   --color-brand-900: #312e81;
+
+  /* Champagne gold — premium accent */
+  --color-gold-50: #fbf7ee;
+  --color-gold-100: #f5ead0;
+  --color-gold-200: #ead3a0;
+  --color-gold-300: #ddbb70;
+  --color-gold-400: #cda24a;
+  --color-gold-500: #b8873a;
+  --color-gold-600: #96692c;
+
+  /* Ink — deep navy premium surfaces */
+  --color-ink-700: #1b2450;
+  --color-ink-800: #121936;
+  --color-ink-900: #0b1020;
+  --color-ink-950: #070a16;
 }
 
 html,
@@ -24,6 +41,81 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  color: #14162b;
+  background:
+    radial-gradient(1100px 560px at 100% -8%, rgba(205, 162, 74, 0.07), transparent 58%),
+    radial-gradient(900px 520px at -8% 4%, rgba(67, 56, 202, 0.06), transparent 55%),
+    #f7f6f2;
+  background-attachment: fixed;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    color: #e7e8f0;
+    background:
+      radial-gradient(1100px 560px at 100% -8%, rgba(205, 162, 74, 0.10), transparent 58%),
+      radial-gradient(900px 520px at -8% 4%, rgba(99, 102, 241, 0.12), transparent 55%),
+      #070a16;
+  }
+}
+
+/* Premium typographic polish */
+h1,
+h2,
+h3 {
+  letter-spacing: -0.014em;
+}
+
+/* Reusable premium surfaces & accents */
+.card-lux {
+  background: #ffffff;
+  border: 1px solid #ece8df;
+  border-radius: 1.15rem;
+  box-shadow:
+    0 1px 2px rgba(16, 20, 40, 0.04),
+    0 14px 32px -18px rgba(16, 20, 40, 0.18);
+}
+.card-lux-hover {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+.card-lux-hover:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-gold-300);
+  box-shadow:
+    0 2px 4px rgba(16, 20, 40, 0.05),
+    0 24px 48px -22px rgba(16, 20, 40, 0.28);
+}
+@media (prefers-color-scheme: dark) {
+  .card-lux {
+    background: #0f1326;
+    border-color: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 16px 40px -24px rgba(0, 0, 0, 0.8);
+  }
+  .card-lux-hover:hover {
+    border-color: rgba(205, 162, 74, 0.5);
+  }
+}
+
+.text-gold {
+  background: linear-gradient(100deg, #e6c987 0%, #cda24a 45%, #b8873a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hairline-gold {
+  height: 2px;
+  width: 3rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, var(--color-gold-400), transparent);
+}
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 /* Thin, unobtrusive scrollbars */
