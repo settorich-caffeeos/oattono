@@ -45,7 +45,7 @@ export default function Dashboard() {
 
         <div className="relative">
           <p className="eyebrow text-gold-300">Business Exclusive · AI Copilot</p>
-          <h1 className="mt-3 max-w-2xl font-serif text-3xl font-semibold leading-[1.15] sm:text-[2.6rem]">
+          <h1 className="mt-3 max-w-2xl font-display text-3xl font-semibold leading-[1.15] sm:text-[2.6rem]">
             ให้ AI ช่วยคิด วิเคราะห์
             <br className="hidden sm:block" /> และสร้างเอกสารระดับ
             <span className="text-gold"> ผู้บริหาร</span>
@@ -70,7 +70,7 @@ export default function Dashboard() {
           </div>
           <div className="mt-9 flex flex-wrap items-center gap-7">
             <div>
-              <p className="font-serif text-3xl font-semibold text-slate-400">
+              <p className="font-display text-3xl font-semibold text-slate-400">
                 2–5 วัน
               </p>
               <p className="mt-0.5 text-xs uppercase tracking-wider text-slate-500">
@@ -79,7 +79,7 @@ export default function Dashboard() {
             </div>
             <div className="text-2xl text-gold-400/70">→</div>
             <div>
-              <p className="font-serif text-3xl font-semibold text-gold">
+              <p className="font-display text-3xl font-semibold text-gold">
                 15–30 นาที
               </p>
               <p className="mt-0.5 text-xs uppercase tracking-wider text-slate-500">
