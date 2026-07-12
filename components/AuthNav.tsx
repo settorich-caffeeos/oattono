@@ -5,7 +5,13 @@ import { useEffect, useState } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
 
-export default function AuthNav({ onNavigate }: { onNavigate?: () => void }) {
+export default function AuthNav({
+  onNavigate,
+  onDark = false,
+}: {
+  onNavigate?: () => void;
+  onDark?: boolean;
+}) {
   const [email, setEmail] = useState<string | null>(null);
   const [ready, setReady] = useState(false);
 
@@ -26,7 +32,13 @@ export default function AuthNav({ onNavigate }: { onNavigate?: () => void }) {
   }, []);
 
   if (!ready) {
-    return <div className="h-11 rounded-xl bg-slate-100 dark:bg-slate-800/50" />;
+    return (
+      <div
+        className={`h-11 rounded-xl ${
+          onDark ? "bg-white/5" : "bg-slate-100 dark:bg-slate-800/50"
+        }`}
+      />
+    );
   }
 
   if (email) {
@@ -34,14 +46,22 @@ export default function AuthNav({ onNavigate }: { onNavigate?: () => void }) {
       <Link
         href="/profile"
         onClick={onNavigate}
-        className="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm hover:border-brand-300 dark:border-slate-800 dark:bg-slate-800/40 dark:hover:border-brand-700"
+        className={`flex items-center gap-3 rounded-xl border px-3 py-2.5 text-sm transition ${
+          onDark
+            ? "border-white/10 bg-white/5 text-slate-100 hover:border-gold-400/50"
+            : "border-slate-200 bg-slate-50 hover:border-brand-300 dark:border-slate-800 dark:bg-slate-800/40 dark:hover:border-brand-700"
+        }`}
       >
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-600 text-xs font-bold text-white">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-gold-300 to-gold-500 text-xs font-bold text-ink-900">
           {email.slice(0, 1).toUpperCase()}
         </span>
         <span className="min-w-0">
           <span className="block truncate font-medium">{email}</span>
-          <span className="block text-xs text-slate-400">ดูโปรไฟล์</span>
+          <span
+            className={`block text-xs ${onDark ? "text-slate-400" : "text-slate-400"}`}
+          >
+            ดูโปรไฟล์
+          </span>
         </span>
       </Link>
     );
@@ -52,14 +72,22 @@ export default function AuthNav({ onNavigate }: { onNavigate?: () => void }) {
       <Link
         href="/login"
         onClick={onNavigate}
-        className="flex-1 rounded-xl bg-brand-600 px-3 py-2 text-center text-sm font-semibold text-white hover:bg-brand-700"
+        className={`flex-1 rounded-xl px-3 py-2 text-center text-sm font-semibold ${
+          onDark
+            ? "bg-gradient-to-br from-gold-300 to-gold-500 text-ink-900 hover:from-gold-200 hover:to-gold-400"
+            : "bg-brand-600 text-white hover:bg-brand-700"
+        }`}
       >
         เข้าสู่ระบบ
       </Link>
       <Link
         href="/signup"
         onClick={onNavigate}
-        className="flex-1 rounded-xl border border-slate-200 px-3 py-2 text-center text-sm font-medium text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+        className={`flex-1 rounded-xl border px-3 py-2 text-center text-sm font-medium transition ${
+          onDark
+            ? "border-white/15 text-slate-200 hover:bg-white/5"
+            : "border-slate-200 text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+        }`}
       >
         สมัคร
       </Link>

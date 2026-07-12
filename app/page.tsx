@@ -36,40 +36,56 @@ export default function Dashboard() {
   return (
     <div>
       {/* Hero */}
-      <section className="mb-8 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-600 via-brand-700 to-indigo-800 p-8 text-white sm:p-10">
-        <p className="text-sm font-medium text-brand-100">
-          AI Digital Transformation Copilot
-        </p>
-        <h1 className="mt-2 max-w-2xl text-3xl font-bold leading-tight sm:text-4xl">
-          ให้ AI ช่วยคิด วิเคราะห์ และสร้างเอกสาร
-        </h1>
-        <p className="mt-3 max-w-2xl text-brand-100">
-          Workspace สำหรับสาย Digital Transformation, Strategy, PMO และ
-          Enterprise Architecture — ลดเวลาทำเอกสารจากหลายวันเหลือเพียงไม่กี่นาที
-        </p>
-        <div className="mt-6 flex flex-wrap gap-3">
-          <Link
-            href="/chat"
-            className="rounded-xl bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 transition hover:bg-brand-50"
-          >
-            💬 เริ่มคุยกับ AI
-          </Link>
-          <Link
-            href="/modules"
-            className="rounded-xl bg-white/15 px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/25"
-          >
-            🧰 ดูโมดูลทั้งหมด
-          </Link>
-        </div>
-        <div className="mt-8 flex flex-wrap gap-6 text-sm">
-          <div>
-            <p className="text-3xl font-bold">2–5 วัน</p>
-            <p className="text-brand-100">เวลาทำงานแบบเดิม</p>
+      <section className="relative mb-9 overflow-hidden rounded-[1.6rem] border border-white/[0.06] bg-gradient-to-br from-ink-800 via-ink-900 to-ink-950 p-8 text-white shadow-[0_30px_80px_-40px_rgba(11,16,32,0.9)] sm:p-11">
+        {/* gold glow accents */}
+        <div className="pointer-events-none absolute -right-16 -top-24 h-72 w-72 rounded-full bg-gold-400/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-1/3 h-64 w-64 rounded-full bg-brand-500/15 blur-3xl" />
+        {/* hairline frame */}
+        <div className="pointer-events-none absolute inset-3 rounded-[1.3rem] ring-1 ring-inset ring-white/[0.05]" />
+
+        <div className="relative">
+          <p className="eyebrow text-gold-300">Business Exclusive · AI Copilot</p>
+          <h1 className="mt-3 max-w-2xl font-serif text-3xl font-semibold leading-[1.15] sm:text-[2.6rem]">
+            ให้ AI ช่วยคิด วิเคราะห์
+            <br className="hidden sm:block" /> และสร้างเอกสารระดับ
+            <span className="text-gold"> ผู้บริหาร</span>
+          </h1>
+          <p className="mt-4 max-w-2xl leading-relaxed text-slate-300/90">
+            Workspace สำหรับสาย Digital Transformation, Strategy, PMO และ
+            Enterprise Architecture — ลดเวลาทำเอกสารจากหลายวันเหลือเพียงไม่กี่นาที
+          </p>
+          <div className="mt-7 flex flex-wrap gap-3">
+            <Link
+              href="/chat"
+              className="rounded-xl bg-gradient-to-br from-gold-300 to-gold-500 px-5 py-2.5 text-sm font-semibold text-ink-900 shadow-lg shadow-gold-500/20 transition hover:from-gold-200 hover:to-gold-400"
+            >
+              💬 เริ่มคุยกับ AI
+            </Link>
+            <Link
+              href="/modules"
+              className="rounded-xl bg-white/[0.06] px-5 py-2.5 text-sm font-semibold text-white ring-1 ring-inset ring-white/15 backdrop-blur transition hover:bg-white/[0.12]"
+            >
+              🧰 ดูโมดูลทั้งหมด
+            </Link>
           </div>
-          <div className="flex items-center text-2xl text-brand-200">→</div>
-          <div>
-            <p className="text-3xl font-bold">15–30 นาที</p>
-            <p className="text-brand-100">ด้วย DT Copilot</p>
+          <div className="mt-9 flex flex-wrap items-center gap-7">
+            <div>
+              <p className="font-serif text-3xl font-semibold text-slate-400">
+                2–5 วัน
+              </p>
+              <p className="mt-0.5 text-xs uppercase tracking-wider text-slate-500">
+                เวลาทำงานแบบเดิม
+              </p>
+            </div>
+            <div className="text-2xl text-gold-400/70">→</div>
+            <div>
+              <p className="font-serif text-3xl font-semibold text-gold">
+                15–30 นาที
+              </p>
+              <p className="mt-0.5 text-xs uppercase tracking-wider text-slate-500">
+                ด้วย DT Copilot
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -80,13 +96,16 @@ export default function Dashboard() {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Quick actions */}
         <div className="lg:col-span-2">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-semibold">เริ่มงานด่วน</h2>
+          <div className="mb-4 flex items-center justify-between">
+            <div>
+              <div className="hairline-gold mb-2" />
+              <h2 className="text-lg font-semibold">เริ่มงานด่วน</h2>
+            </div>
             <Link
               href="/modules"
-              className="text-sm text-brand-600 hover:underline dark:text-brand-400"
+              className="text-sm font-medium text-gold-600 hover:text-gold-500 dark:text-gold-400"
             >
-              ดูทั้งหมด ({MODULES.length})
+              ดูทั้งหมด ({MODULES.length}) →
             </Link>
           </div>
           <div className="grid gap-3 sm:grid-cols-2">
@@ -94,16 +113,16 @@ export default function Dashboard() {
               <Link
                 key={m.slug}
                 href={m.route || `/modules/${m.slug}`}
-                className="group flex items-start gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-brand-300 hover:shadow-sm dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700"
+                className="card-lux card-lux-hover group flex items-start gap-3.5 p-4"
               >
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-xl dark:bg-brand-900/30">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-gold-50 text-xl ring-1 ring-black/[0.04] dark:from-brand-900/30 dark:to-gold-500/10 dark:ring-white/5">
                   {m.emoji}
                 </span>
                 <span className="min-w-0">
-                  <span className="block font-medium group-hover:text-brand-600 dark:group-hover:text-brand-400">
+                  <span className="block font-semibold transition group-hover:text-gold-600 dark:group-hover:text-gold-400">
                     {m.titleTh}
                   </span>
-                  <span className="line-clamp-2 text-xs text-slate-500 dark:text-slate-400">
+                  <span className="mt-0.5 line-clamp-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                     {m.summary}
                   </span>
                 </span>
@@ -115,17 +134,15 @@ export default function Dashboard() {
         {/* Recent + workflow */}
         <div className="space-y-6">
           <DashboardRecent />
-          <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-            <h3 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
-              ขั้นตอนการทำงานทั่วไป
-            </h3>
-            <ol className="space-y-2">
+          <div className="card-lux p-5">
+            <h3 className="eyebrow mb-4 text-slate-400">ขั้นตอนการทำงานทั่วไป</h3>
+            <ol className="space-y-1">
               {WORKFLOW.map((step, i) => (
-                <li key={step} className="flex items-center gap-3 text-sm">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-brand-100 text-xs font-semibold text-brand-700 dark:bg-brand-900/40 dark:text-brand-300">
+                <li key={step} className="flex items-center gap-3 py-1 text-sm">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-gold-300/25 to-gold-500/10 text-xs font-semibold text-gold-600 ring-1 ring-gold-400/30 dark:text-gold-300">
                     {i + 1}
                   </span>
-                  <span>{step}</span>
+                  <span className="text-slate-700 dark:text-slate-200">{step}</span>
                 </li>
               ))}
             </ol>
@@ -134,14 +151,17 @@ export default function Dashboard() {
       </div>
 
       {/* Agents */}
-      <section className="mt-10">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-lg font-semibold">ทีมผู้เชี่ยวชาญ AI</h2>
+      <section className="mt-12">
+        <div className="mb-4 flex items-center justify-between">
+          <div>
+            <div className="hairline-gold mb-2" />
+            <h2 className="text-lg font-semibold">ทีมผู้เชี่ยวชาญ AI</h2>
+          </div>
           <Link
             href="/chat"
-            className="text-sm text-brand-600 hover:underline dark:text-brand-400"
+            className="text-sm font-medium text-gold-600 hover:text-gold-500 dark:text-gold-400"
           >
-            เริ่มสนทนา
+            เริ่มสนทนา →
           </Link>
         </div>
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -149,11 +169,13 @@ export default function Dashboard() {
             <Link
               key={a.id}
               href="/chat"
-              className="flex items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 transition hover:border-brand-300 dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700"
+              className="card-lux card-lux-hover flex items-center gap-3 p-4"
             >
-              <span className="text-2xl">{a.emoji}</span>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-gold-50 text-xl ring-1 ring-black/[0.04] dark:from-brand-900/30 dark:to-gold-500/10 dark:ring-white/5">
+                {a.emoji}
+              </span>
               <span className="min-w-0">
-                <span className="block truncate text-sm font-medium">
+                <span className="block truncate text-sm font-semibold">
                   {a.nameTh}
                 </span>
                 <span className="block truncate text-xs text-slate-400">
