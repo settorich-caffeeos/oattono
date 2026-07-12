@@ -6,10 +6,10 @@ function ModuleCard({ mod }: { mod: ModuleDef }) {
   return (
     <Link
       href={href}
-      className="group flex flex-col rounded-2xl border border-slate-200 bg-white p-5 transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700"
+      className="group flex flex-col card-lux card-lux-hover p-5 transition hover:-translate-y-0.5"
     >
       <div className="flex items-start justify-between">
-        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-50 text-2xl dark:bg-brand-900/30">
+        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-brand-50 to-gold-50 text-2xl dark:from-brand-900/30 dark:to-gold-500/10">
           {mod.emoji}
         </span>
         <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] text-slate-500 dark:bg-slate-800 dark:text-slate-400">
@@ -32,9 +32,10 @@ export default function ModulesPage() {
   return (
     <div>
       <header className="mb-8">
-        <h1 className="text-2xl font-bold">โมดูลทั้งหมด</h1>
+        <div className="hairline-gold mb-2" />
+        <h1 className="text-2xl font-bold font-display tracking-tight">โมดูลทั้งหมด</h1>
         <p className="mt-1 text-slate-500 dark:text-slate-400">
-          14 Core Modules ครอบคลุมงานเอกสารและการวิเคราะห์สำหรับสาย Digital
+          15 Core Modules ครอบคลุมงานเอกสารและการวิเคราะห์สำหรับสาย Digital
           Transformation
         </p>
       </header>
@@ -44,7 +45,7 @@ export default function ModulesPage() {
         if (!items.length) return null;
         return (
           <section key={phase} className="mb-10">
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <h2 className="eyebrow mb-3 text-slate-400">
               {PHASE_LABEL[phase]}
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">

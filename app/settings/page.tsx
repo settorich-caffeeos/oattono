@@ -69,7 +69,8 @@ export default function SettingsPage() {
           ⚙️
         </span>
         <div>
-          <h1 className="text-2xl font-bold">ตั้งค่า</h1>
+          <div className="hairline-gold mb-2" />
+          <h1 className="font-display text-2xl font-bold tracking-tight">ตั้งค่า</h1>
           <p className="text-slate-500 dark:text-slate-400">
             ใช้คีย์ส่วนตัว (ไม่บังคับ) — ปกติเซิร์ฟเวอร์ตั้งคีย์ให้ทุกคนอยู่แล้ว
           </p>
@@ -107,7 +108,7 @@ export default function SettingsPage() {
         )}
       </div>
 
-      <div className="space-y-6 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+      <div className="space-y-6 card-lux p-6">
         {/* API key */}
         <div>
           <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">

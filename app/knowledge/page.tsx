@@ -66,11 +66,12 @@ export default function KnowledgePage() {
   return (
     <div>
       <header className="mb-6 flex items-start gap-4">
-        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-3xl dark:bg-brand-900/30">
+        <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-gold-50 text-3xl dark:from-brand-900/30 dark:to-gold-500/10">
           📚
         </span>
         <div>
-          <h1 className="text-2xl font-bold">คลังความรู้องค์กร</h1>
+          <div className="hairline-gold mb-2" />
+          <h1 className="font-display text-2xl font-bold tracking-tight">คลังความรู้องค์กร</h1>
           <p className="text-slate-500 dark:text-slate-400">
             เพิ่มเอกสาร/แนวปฏิบัติภายใน แล้ว AI จะดึงมาอ้างอิงตอนสร้างเอกสารและตอบแชท
             (เปิดสวิตช์ &quot;อ้างอิงคลังความรู้&quot; ในโมดูลหรือหน้าแชท)
@@ -80,9 +81,9 @@ export default function KnowledgePage() {
 
       <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
         {/* Add form */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+        <div className="card-lux p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-400">
+            <h2 className="eyebrow text-slate-400">
               เพิ่มความรู้
             </h2>
             <FileExtractButton
@@ -134,7 +135,7 @@ export default function KnowledgePage() {
               {entries.map((e) => (
                 <div
                   key={e.id}
-                  className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+                  className="card-lux p-4"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <button
@@ -170,7 +171,7 @@ export default function KnowledgePage() {
             className="absolute inset-0 bg-slate-900/50"
             onClick={() => setOpen(null)}
           />
-          <div className="relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+          <div className="relative flex max-h-[85vh] w-full max-w-2xl flex-col card-lux">
             <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3 dark:border-slate-800">
               <h3 className="truncate font-semibold">{open.title}</h3>
               <button

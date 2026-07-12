@@ -62,7 +62,7 @@ export default function SignupPage() {
         <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
           เราส่งลิงก์ยืนยันไปที่ <span className="font-medium">{email}</span> แล้ว
           กดยืนยันในอีเมลเพื่อเปิดใช้งานบัญชี จากนั้นกลับมา{" "}
-          <Link href="/login" className="text-brand-600 hover:underline">
+          <Link href="/login" className="text-gold-600 hover:text-gold-500 dark:text-gold-400">
             เข้าสู่ระบบ
           </Link>
         </p>
@@ -73,14 +73,15 @@ export default function SignupPage() {
   return (
     <div className="mx-auto max-w-md py-8">
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold">สมัครสมาชิก</h1>
+        <div className="hairline-gold mb-2" />
+        <h1 className="font-display text-2xl font-bold tracking-tight">สมัครสมาชิก</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           สร้างบัญชีเพื่อใช้งาน DT Copilot
         </p>
       </div>
       <form
         onSubmit={signUp}
-        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+        className="space-y-4 card-lux p-6"
       >
         <div>
           <label className="mb-1 block text-sm font-medium">ชื่อ-นามสกุล</label>
@@ -157,7 +158,7 @@ export default function SignupPage() {
         มีบัญชีอยู่แล้ว?{" "}
         <Link
           href="/login"
-          className="font-medium text-brand-600 hover:underline dark:text-brand-400"
+          className="font-medium text-gold-600 hover:text-gold-500 dark:text-gold-400"
         >
           เข้าสู่ระบบ
         </Link>

@@ -45,14 +45,15 @@ export default function LoginPage() {
   return (
     <div className="mx-auto max-w-md py-8">
       <div className="mb-6 text-center">
-        <h1 className="text-2xl font-bold">เข้าสู่ระบบ</h1>
+        <div className="hairline-gold mb-2" />
+        <h1 className="font-display text-2xl font-bold tracking-tight">เข้าสู่ระบบ</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           เข้าใช้งาน DT Copilot ด้วยบัญชีของคุณ
         </p>
       </div>
       <form
         onSubmit={signIn}
-        className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900"
+        className="space-y-4 card-lux p-6"
       >
         <div>
           <label className="mb-1 block text-sm font-medium">อีเมล</label>
@@ -91,7 +92,7 @@ export default function LoginPage() {
         ยังไม่มีบัญชี?{" "}
         <Link
           href="/signup"
-          className="font-medium text-brand-600 hover:underline dark:text-brand-400"
+          className="font-medium text-gold-600 hover:text-gold-500 dark:text-gold-400"
         >
           สมัครสมาชิก
         </Link>

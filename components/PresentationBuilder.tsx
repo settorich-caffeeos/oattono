@@ -168,8 +168,8 @@ export default function PresentationBuilder() {
   return (
     <div className="grid gap-6 lg:grid-cols-[340px_1fr]">
       {/* Form */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">
+      <div className="card-lux p-5">
+        <h2 className="mb-4 eyebrow text-slate-400">
           ตั้งค่าการนำเสนอ
         </h2>
         <div className="space-y-4">

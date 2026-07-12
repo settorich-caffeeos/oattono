@@ -45,7 +45,8 @@ export default async function ProfilePage() {
           {(profile.display_name || profile.email || "?").slice(0, 1).toUpperCase()}
         </span>
         <div>
-          <h1 className="text-2xl font-bold">
+          <div className="hairline-gold mb-2" />
+          <h1 className="font-display text-2xl font-bold tracking-tight">
             {profile.display_name || "โปรไฟล์ของฉัน"}
           </h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">

@@ -61,7 +61,8 @@ export default function ChatPage() {
   return (
     <div className="flex h-[calc(100vh-8rem)] flex-col lg:h-[calc(100vh-4rem)]">
       <header className="mb-4">
-        <h1 className="text-2xl font-bold">AI Chat</h1>
+        <div className="hairline-gold mb-2" />
+        <h1 className="font-display text-2xl font-bold tracking-tight">AI Chat</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           เลือกผู้เชี่ยวชาญที่ต้องการคุยด้วย หรือให้ Orchestrator เลือกให้อัตโนมัติ
         </p>
@@ -95,7 +96,7 @@ export default function ChatPage() {
       {/* Conversation */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-800 dark:bg-slate-900"
+        className="flex-1 overflow-y-auto card-lux p-4"
       >
         {messages.length === 0 ? (
           <div className="flex h-full flex-col items-center justify-center text-center text-slate-400">

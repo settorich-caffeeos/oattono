@@ -61,8 +61,8 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
   return (
     <div className="grid gap-6 lg:grid-cols-[380px_1fr]">
       {/* Form */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-        <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-slate-400">
+      <div className="card-lux p-5">
+        <h2 className="mb-4 eyebrow text-slate-400">
           ข้อมูลนำเข้า
         </h2>
         <div className="space-y-4">
@@ -159,7 +159,7 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
       </div>
 
       {/* Output */}
-      <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
+      <div className="min-w-0 card-lux p-5">
         {error && (
           <div className="mb-4 rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-300">
             {error}
@@ -178,7 +178,7 @@ export default function GeneratorClient({ mod }: { mod: ModuleDef }) {
         {(output || loading) && (
           <div>
             <div className="mb-4 flex items-center justify-between gap-3">
-              <span className="text-xs font-medium uppercase tracking-wide text-slate-400">
+              <span className="eyebrow text-slate-400">
                 {loading ? "กำลังสร้าง…" : "ผลลัพธ์"}
               </span>
               {output && !loading && (

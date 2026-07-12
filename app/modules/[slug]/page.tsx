@@ -29,12 +29,13 @@ export default async function ModulePage({
           ← โมดูลทั้งหมด
         </Link>
         <div className="mt-3 flex items-start gap-4">
-          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-50 text-3xl dark:bg-brand-900/30">
+          <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-50 to-gold-50 text-3xl dark:from-brand-900/30 dark:to-gold-500/10">
             {mod.emoji}
           </span>
           <div>
+            <div className="hairline-gold mb-2" />
             <div className="flex flex-wrap items-center gap-2">
-              <h1 className="text-2xl font-bold">{mod.titleTh}</h1>
+              <h1 className="text-2xl font-bold font-display tracking-tight">{mod.titleTh}</h1>
               <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-500 dark:bg-slate-800 dark:text-slate-400">
                 {PHASE_LABEL[mod.phase]}
               </span>

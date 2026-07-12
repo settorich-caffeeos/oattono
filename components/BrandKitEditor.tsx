@@ -111,7 +111,7 @@ export default function BrandKitEditor() {
   }
 
   return (
-    <div className="mt-8 space-y-5 rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-800 dark:bg-slate-900">
+    <div className="mt-8 space-y-5 card-lux p-6">
       <div>
         <h2 className="text-lg font-bold">🎨 Brand Kit — ธีมองค์กรของคุณ</h2>
         <p className="text-sm text-slate-500 dark:text-slate-400">
@@ -210,7 +210,7 @@ export default function BrandKitEditor() {
 
         {/* live preview */}
         <div>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-slate-400">
+          <p className="mb-2 eyebrow text-slate-400">
             ตัวอย่างสไลด์
           </p>
           <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm dark:border-slate-700">
