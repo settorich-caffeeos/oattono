@@ -107,6 +107,12 @@ export default function ProjectsPage() {
                 >
                   🎤 สร้างสไลด์นำเสนอ
                 </Link>
+                <Link
+                  href={`/present?project=${p.id}&preset=pitch`}
+                  className="rounded-lg border border-brand-300 px-3 py-1.5 text-sm font-medium text-brand-700 hover:bg-brand-50 dark:border-brand-700 dark:text-brand-300 dark:hover:bg-brand-950/30"
+                >
+                  🚀 Pitch Deck นักลงทุน
+                </Link>
                 <button
                   onClick={() =>
                     setCreateFor(createFor === p.id ? null : p.id)

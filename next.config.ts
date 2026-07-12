@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   output: "standalone",
   // Keep the PDF parser (and its pdfjs worker) unbundled so it resolves its
   // worker file from node_modules at runtime instead of a rewritten path.
-  serverExternalPackages: ["pdf-parse", "pdfjs-dist"],
+  serverExternalPackages: ["pdf-parse", "pdfjs-dist", "exceljs"],
 };
 
 export default nextConfig;

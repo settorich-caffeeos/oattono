@@ -8,6 +8,37 @@ export const maxDuration = 60;
 
 const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
 
+/** ดึงข้อความจากเซลล์ Excel (รองรับ rich text / สูตร / วันที่ / ไฮเปอร์ลิงก์) */
+function cellText(c: unknown): string {
+  if (c == null) return "";
+  if (c instanceof Date) return c.toISOString().slice(0, 10);
+  if (typeof c === "object") {
+    const o = c as Record<string, unknown>;
+    if (typeof o.text === "string") return o.text;
+    if (Array.isArray(o.richText))
+      return o.richText.map((r) => (r as { text?: string }).text ?? "").join("");
+    if ("result" in o) return String(o.result ?? "");
+    return "";
+  }
+  return String(c);
+}
+
+async function extractXlsx(buf: Buffer): Promise<string> {
+  const ExcelJS = (await import("exceljs")).default;
+  const wb = new ExcelJS.Workbook();
+  await wb.xlsx.load(buf as unknown as ArrayBuffer);
+  const parts: string[] = [];
+  wb.eachSheet((sheet) => {
+    const rows: string[] = [];
+    sheet.eachRow((row) => {
+      const vals = (row.values as unknown[]).slice(1).map((v) => cellText(v));
+      if (vals.some((v) => v !== "")) rows.push(vals.join(", "));
+    });
+    if (rows.length) parts.push(`# ${sheet.name}\n${rows.join("\n")}`);
+  });
+  return parts.join("\n\n");
+}
+
 export async function POST(req: NextRequest) {
   const blocked = await guard(req, { limit: 30 });
   if (blocked) return blocked;
@@ -31,11 +62,13 @@ export async function POST(req: NextRequest) {
       text = (await parser.getText()).text;
     } else if (name.endsWith(".docx")) {
       text = (await mammoth.extractRawText({ buffer: buf })).value;
+    } else if (/\.(xlsx|xlsm)$/.test(name)) {
+      text = await extractXlsx(buf);
     } else if (/\.(txt|md|csv|json)$/.test(name)) {
       text = buf.toString("utf-8");
     } else {
       return Response.json(
-        { error: "รองรับเฉพาะ PDF, DOCX, TXT, MD, CSV" },
+        { error: "รองรับเฉพาะ PDF, DOCX, XLSX, TXT, MD, CSV" },
         { status: 415 },
       );
     }

@@ -45,7 +45,7 @@ export default function FileExtractButton({
       <input
         ref={inputRef}
         type="file"
-        accept=".pdf,.docx,.txt,.md,.csv,.json"
+        accept=".pdf,.docx,.xlsx,.xlsm,.txt,.md,.csv,.json"
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
