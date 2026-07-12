@@ -22,6 +22,7 @@ export default function PresentationBuilder() {
   const [count, setCount] = useState("10");
   const [tone, setTone] = useState("");
   const [paletteId, setPaletteId] = useState("indigo");
+  const [preset, setPreset] = useState("standard");
   const [sourceMode, setSourceMode] = useState<"topic" | "project">("topic");
   const [projectId, setProjectId] = useState("");
   const [selectedDocs, setSelectedDocs] = useState<Set<string>>(new Set());
@@ -45,11 +46,13 @@ export default function PresentationBuilder() {
 
   // Preselect a project when arriving from /projects (?project=<id>)
   useEffect(() => {
-    const p = new URLSearchParams(window.location.search).get("project");
+    const params = new URLSearchParams(window.location.search);
+    const p = params.get("project");
     if (p) {
       setSourceMode("project");
       setPendingProject(p);
     }
+    if (params.get("preset") === "pitch") setPreset("pitch");
   }, []);
   useEffect(() => {
     if (pendingProject && projects.some((x) => x.id === pendingProject)) {
@@ -106,7 +109,7 @@ export default function PresentationBuilder() {
     try {
       await streamPost(
         "/api/slides",
-        { topic: effectiveTopic, audience, count, tone, source, style: getPaletteVibe(paletteId) },
+        { topic: effectiveTopic, audience, count, tone, source, style: getPaletteVibe(paletteId), preset },
         (chunk) => {
           rawRef.current += chunk;
         },
@@ -251,6 +254,23 @@ export default function PresentationBuilder() {
               }
               className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm outline-none focus:border-brand-400 dark:border-slate-700 dark:bg-slate-950"
             />
+          </div>
+          <div>
+            <label className="mb-1 block text-sm font-medium">รูปแบบสไลด์</label>
+            <select
+              value={preset}
+              onChange={(e) => setPreset(e.target.value)}
+              className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-950"
+            >
+              <option value="standard">นำเสนอทั่วไป (Business / Executive)</option>
+              <option value="pitch">🚀 Pitch Deck นักลงทุน (Startup)</option>
+            </select>
+            {preset === "pitch" && (
+              <p className="mt-1 text-xs text-slate-400">
+                ใช้โครงเรื่องมาตรฐาน pitch: ปัญหา → ทางออก → ตลาด → โมเดลธุรกิจ →
+                Traction → คู่แข่ง → การเงิน → The Ask
+              </p>
+            )}
           </div>
           <div>
             <label className="mb-1 block text-sm font-medium">กลุ่มผู้ฟัง</label>
