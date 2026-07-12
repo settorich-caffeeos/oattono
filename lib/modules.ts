@@ -195,6 +195,73 @@ export const MODULES: ModuleDef[] = [
     ],
   },
   {
+    slug: "product-evaluator",
+    title: "Product Evaluator & Business Plan",
+    titleTh: "ประเมิน Product & วางแผนธุรกิจ",
+    emoji: "🎯",
+    phase: 2,
+    agentId: "business-strategist",
+    summary:
+      "อัปโหลดข้อมูลผลิตภัณฑ์ (PDF/Word/Excel/CSV) แล้วให้ AI ประเมินตลาด, SWOT, Business Model, ROI, Go-to-Market และ Roadmap ให้ครบในเอกสารเดียว",
+    outline: [
+      "บทสรุปผู้บริหารและคำตัดสิน (Executive Summary & Go / No-Go)",
+      "ภาพรวมผลิตภัณฑ์และคุณค่า (Value Proposition)",
+      "ตลาดและกลุ่มลูกค้าเป้าหมาย (Market & Target Customer)",
+      "การวิเคราะห์คู่แข่งและ SWOT",
+      "Business Model (รายได้ / ต้นทุน / โครงสร้างราคา)",
+      "ประมาณการทางการเงินและ ROI",
+      "กลยุทธ์ Go-to-Market",
+      "Roadmap และก้าวถัดไป",
+      "ความเสี่ยงและข้อเสนอแนะ",
+    ],
+    fields: [
+      {
+        name: "productName",
+        label: "Product / service name",
+        labelTh: "ชื่อผลิตภัณฑ์ / บริการ",
+        type: "text",
+        placeholder: "เช่น แอปจัดการร้านกาแฟ CaffeeOS",
+        required: true,
+      },
+      {
+        name: "productDesc",
+        label: "What it is & what problem it solves",
+        labelTh: "ผลิตภัณฑ์คืออะไร แก้ปัญหาอะไร ฟีเจอร์เด่น",
+        type: "textarea",
+        placeholder:
+          "อธิบายสั้น ๆ ว่าผลิตภัณฑ์ทำอะไร เพื่อใคร จุดขายคืออะไร (กด 📎 ไฟล์ เพื่อแนบเอกสารสเปก/สไลด์)",
+        required: true,
+      },
+      {
+        name: "productData",
+        label: "Supporting data (sales, cost, price, feedback)",
+        labelTh: "ข้อมูลประกอบ (ยอดขาย / ต้นทุน / ราคา / ฟีดแบ็กลูกค้า)",
+        type: "textarea",
+        placeholder:
+          "วางข้อมูลตัวเลข หรือกด 📎 ไฟล์ เพื่ออัปโหลด Excel/CSV/PDF ให้ AI อ่าน แล้วนำมาวิเคราะห์",
+      },
+      {
+        name: "targetMarket",
+        label: "Target market / customer",
+        labelTh: "ตลาด / กลุ่มลูกค้าเป้าหมาย",
+        type: "text",
+        placeholder: "เช่น ร้านกาแฟ SME ในไทย",
+      },
+      {
+        name: "stage",
+        label: "Product stage",
+        labelTh: "ระยะของผลิตภัณฑ์",
+        type: "select",
+        options: [
+          "ไอเดีย (Concept)",
+          "ต้นแบบ (Prototype / MVP)",
+          "เพิ่งวางขาย (Early launch)",
+          "ขายแล้ว ต้องการเติบโต (Growth)",
+        ],
+      },
+    ],
+  },
+  {
     slug: "roi-calculator",
     title: "ROI Calculator",
     titleTh: "คำนวณ ROI",
