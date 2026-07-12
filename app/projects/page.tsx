@@ -4,7 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { useProjects, type SavedDoc } from "@/lib/store";
 import { getModule, MODULES } from "@/lib/modules";
+import { extractDeck, deckToMarkdown } from "@/lib/slides-types";
 import MarkdownView from "@/components/MarkdownView";
+
+/** A saved presentation stores its deck as JSON — recover it if present. */
+function deckOf(doc: SavedDoc) {
+  if (doc.moduleSlug !== "presentation-builder") return null;
+  return extractDeck(doc.content);
+}
 
 function createHref(slug: string, route: string | undefined, projectId: string) {
   if (route === "/present") return `/present?project=${projectId}`;
@@ -186,17 +193,34 @@ export default function ProjectsPage() {
             onClick={() => setViewing(null)}
           />
           <div className="relative flex max-h-[85vh] w-full max-w-3xl flex-col card-lux">
-            <div className="flex items-center justify-between border-b border-slate-200 px-5 py-3 dark:border-slate-800">
+            <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-5 py-3 dark:border-slate-800">
               <h3 className="truncate font-semibold">{viewing.title}</h3>
-              <button
-                onClick={() => setViewing(null)}
-                className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
-              >
-                ✕
-              </button>
+              <div className="flex shrink-0 items-center gap-2">
+                {deckOf(viewing) && (
+                  <Link
+                    href={`/present?doc=${viewing.id}`}
+                    className="rounded-lg bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700"
+                  >
+                    🎤 เปิด/แก้ไขสไลด์
+                  </Link>
+                )}
+                <button
+                  onClick={() => setViewing(null)}
+                  className="rounded-lg px-2 py-1 text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800"
+                >
+                  ✕
+                </button>
+              </div>
             </div>
             <div className="overflow-y-auto px-6 py-4">
-              <MarkdownView content={viewing.content} />
+              {(() => {
+                const deck = deckOf(viewing);
+                return (
+                  <MarkdownView
+                    content={deck ? deckToMarkdown(deck) : viewing.content}
+                  />
+                );
+              })()}
             </div>
           </div>
         </div>
