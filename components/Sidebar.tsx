@@ -78,11 +78,11 @@ export default function Sidebar() {
       className="flex items-center gap-3"
       onClick={() => setOpen(false)}
     >
-      <span className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-gold-300 to-gold-500 font-serif text-lg font-bold text-ink-900 shadow-lg ring-1 ring-white/20">
+      <span className="relative flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-gold-300 to-gold-500 font-display text-lg font-bold text-ink-900 shadow-lg ring-1 ring-white/20">
         DT
       </span>
       <span>
-        <span className="block font-serif text-lg font-semibold leading-tight tracking-tight text-white">
+        <span className="block font-display text-lg font-semibold leading-tight tracking-tight text-white">
           DT Copilot
         </span>
         <span className="block text-[0.7rem] font-medium uppercase tracking-[0.14em] text-gold-300/80">

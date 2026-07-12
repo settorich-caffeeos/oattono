@@ -1,9 +1,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", "IBM Plex Sans Thai", "Noto Sans Thai", system-ui,
+  --font-sans: "Sarabun", "IBM Plex Sans Thai", "Noto Sans Thai", system-ui,
     -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: ui-serif, Georgia, "Times New Roman", "Noto Serif Thai", serif;
+  --font-display: "Kanit", "Sarabun", system-ui, -apple-system, "Segoe UI",
+    sans-serif;
 
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
